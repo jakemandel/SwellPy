@@ -63,6 +63,42 @@ class Monodisperse(ParticleSystem):
         pairs = np.array(list(pairs), dtype=np.int64)
         return pairs
     
+    def find_angle(self, pairs):
+        """
+        Finds the kick angles with respect to the first particle.
+        """
+        theta = []
+        for i in pairs:
+            x1 = self.centers[i[0]][0] # x-coordinate of first particle
+            x2 = self.centers[i[1]][0] # x-coordinate of second particle
+            y1 = self.centers[i[0]][1] # y-coordinate of first particle
+            y2 = self.centers[i[1]][1] # y-coordinate of second particle
+            t1 = np.arctan((y2-y1)/(x2-x1))*(180/np.pi)
+            if t1 < 0:
+                t1 = t1 + 360
+            if t1 > 180:
+                t2 = t1 - 180
+            else:
+                t2 = t1 + 180
+            theta.append(t1)
+            theta.append(t2)
+        return theta
+    
+    def find_angle2(self, pairs):
+        """
+        Finds the kick angles with respect to the first particle.
+        """
+        theta = []
+        for i in pairs:
+            x1 = self.centers[i[0]][0] # x-coordinate of first particle
+            x2 = self.centers[i[1]][0] # x-coordinate of second particle
+            y1 = self.centers[i[0]][1] # y-coordinate of first particle
+            y2 = self.centers[i[1]][1] # y-coordinate of second particle
+            angle = np.arctan2((y2-y1),(x2-x1))*(180/np.pi) # angle in degrees
+            theta.append(angle)
+        return theta
+    
+
     def tag(self, area_frac):
         """
         Finds all tagged particles at some area fraction.
@@ -89,6 +125,7 @@ class Monodisperse(ParticleSystem):
         swell = self.equiv_swell(area_frac)
         self._repel(pairs, swell, kick)
 
+
     def train(self, area_frac, kick, cycles=np.inf, noise=0):
         """
         Repeatedly tags and repels overlapping particles for some number of cycles
@@ -101,6 +138,7 @@ class Monodisperse(ParticleSystem):
         Returns:
             (int) the number of tagging and repelling cycles until no particles overlapped
         """
+        
         count = 0
         swell = self.equiv_swell(area_frac)
         pairs = self._tag(swell)
@@ -111,7 +149,133 @@ class Monodisperse(ParticleSystem):
             pairs = self._tag(swell)
             count += 1
         return count
+    
+    def train_xform(self, scale_x, scale_y, area_frac, kick, cycles=np.inf, noise=0):
+        """
+        Repeatedly transforms system by given amount in given direction, tags particles, transforms back
+        to original scale and repels the tagged particles when system what transformed. For some number of cycles
+        Args:
+            scale_x: scale x-coordinates of centers of particles
+            scale_y: scale y-coordinates of centers of particles
+            area_frac (float): the area fraction to train on
+            kick (float): the maximum distance particles are repelled
+            cycles (int): The upper bound on the number of cycles. Defaults to infinite.
+        Returns:
+            (int) the number of tagging and repelling cycles until no particles overlapped
+        """
+        count = 0
+        swell = self.equiv_swell(area_frac)
+        pairs = self._tag(swell)
+        while (cycles > count and (len(pairs) > 0) ):
+            for i in self.centers: #Transform
+                i[0] = i[0]*(scale_x)*(1/scale_y)
+                i[1] = i[1]*(scale_y)*(1/scale_x)
+            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            self.wrap()
+            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            pairs = self._tag(swell) #Tag
+            for i in self.centers: #Transform back
+                i[0] = i[0]*(1/scale_x)*(scale_y)
+                i[1] = i[1]*(1/scale_y)*(scale_x)
+            self._repel(pairs, swell, kick)
+            self.pos_noise(noise)
+            self.wrap()
+            count += 1
+        return count
+    
+    # def train_xform2(self, axis = ‘x’, ratio):
+    #     count = 0
+    #     swell = self.equiv_swell(area_frac)
+    #     pairs = self._tag(swell)
+    #     if (axis == ‘x’):
+    #         while (cycles > count and (len(pairs) > 0) ):
+    #             for i in self.centers: #Transform
+    #                 i[0] = i[0] * ratio
+    #             for i in self.centers:
+    #                 i[1] = i[1] * (1/ratio)
+    #             pairs = self._tag(swell) #Tag
+    #             for i in self.centers: #Transform back
+    #                 i[0] = i[0] * (1 / ratio)
+    #             for i in self.centers:
+    #                 i[1] = i[1] * ratio
+    #             self._repel(pairs, swell, kick)
+    #             self.pos_noise(noise)
+    #             self.wrap()
+    #             count += 1
+    #         return count
+    #     else (axis == ‘y’):
+    #         while (cycles > count and (len(pairs) > 0) ):
+    #             for i in self.centers: #Transform
+    #                 i[0] = i[0] * (1/ratio)
+    #             for i in self.centers:
+    #                 i[1] = i[1] * ratio
+    #             pairs = self._tag(swell) #Tag
+    #             for i in self.centers: #Transform back
+    #                 i[0] = i[0] * ratio
+    #             for i in self.centers:
+    #                 i[1] = i[1] * (1/ratio)
+    #             self._repel(pairs, swell, kick)
+    #             self.pos_noise(noise)
+    #             self.wrap()
+    #             count += 1
+    #         return count
+                    
 
+
+    def train_rotxform(self, degrees, scale, area_frac, kick, cycles=np.inf, noise=0):
+        """ 
+        Rotates system by input degrees, system is scaled by a factor of input scale value, overlapping particles
+        are tagged. System is scaled back to original particle 'size.' System is rotated back to original position.
+        Particles are then repelled, cycle is complete. Repeat for number of cycles.
+        
+        Essentially: Training incorporates scaling the system along the axis of the input degrees.
+        
+        Args:
+            degrees: Rotate system by given amount of degrees.
+            scale: Scale axis by a specified amount 
+            area_frac (float): the area fraction to train on
+            kick (float): the maximum distance particles are repelled
+            cycles (int): The upper bound on the number of cycles. Defaults to infinite.
+
+        Returns:
+            (int) the number of tagging and repelling cycles until no particles overlapped
+        """
+        count = 0
+        swell = self.equiv_swell(area_frac)
+        pairs = self._tag(swell)
+        theta = np.radians(degrees)
+        r = np.array(( (np.cos(theta), -np.sin(theta)),     # Forward Transform Matrix
+                      (np.sin(theta),  np.cos(theta)) ))
+        while (cycles > count and (len(pairs) > 0) ):
+            theta = np.radians(degrees)
+            r = np.array(( (np.cos(theta), -np.sin(theta)),
+                      (np.sin(theta),  np.cos(theta)) ))
+            for i in self.centers:
+                [i[0], i[1]] = np.dot(r, [i[0], i[1]])
+            for i in self.centers: #scale
+                i[1] = i[1]*scale
+            for i in self.centers:
+                i[0] = i[0]*(1/scale) # Scale perp axis to keep area the same
+            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            self.wrap()
+            pairs = self._tag(swell) # Tag
+            r_inv = np.linalg.inv(r)   # Inverse Transform Matrix
+            for i in self.centers: # scale
+                i[1] = i[1]*(1/scale)
+            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            for i in self.centers:
+                i[0] = i[0]*(scale) 
+            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            for i in self.centers:
+                [i[0], i[1]] = np.dot(r_inv, [i[0], i[1]])
+            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            
+            self._repel(pairs, swell, kick)
+            self.pos_noise(noise)
+            self.wrap()
+            count += 1
+        return count
+    
 
     def particle_plot(self, area_frac, show=True, extend = False, figsize = (7,7), filename=None):
         """
