@@ -27,9 +27,9 @@ and is NOT a method of the ParticleSystem class.
 
 """
 
-class ParticleSystem():
+class ParticleSystem2():
     def __init__(self, N, boxsize_x=None, boxsize_y=None, seed=None):
-        self._name = "ParticleSystem"
+        self._name = "ParticleSystem2"
         self.N = N
         if (boxsize_x) and (boxsize_y):
             self.boxsize = boxsize_x*boxsize_y

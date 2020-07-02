@@ -4,19 +4,20 @@ from matplotlib.patches import Circle
 from scipy.spatial import cKDTree
 from peakutils import peak
 import crepel
-from .particle_system import ParticleSystem
+from particle_system_box_xform import ParticleSystem2
 
 
-class Monodisperse(ParticleSystem):
-    def __init__(self, N, boxsize=None, seed=None):
+class Monodisperse2(ParticleSystem2):
+    def __init__(self, N, boxsize_x=None, boxsize_y=None, seed=None):
         """
         Args:
             N (int): The number of particles in the system
             boxsize (float): optional. Length of the sides of the box
             seed (int): optional. Seed for initial particle placement randomiztion
         """
-        super(Monodisperse, self).__init__(N, boxsize, seed)
-        self._name = "Monodisperse"
+        super(Monodisperse2, self).__init__(N, boxsize_x, boxsize_y, seed)
+        self._name = "Monodisperse2"
+        self.boxsize = boxsize_x*boxsize_y
     
     def equiv_swell(self, area_frac):
         """
@@ -59,6 +60,27 @@ class Monodisperse(ParticleSystem):
         # but there is a deallocation bug in the scipy.spatial code
         # converting from a set to an array avoids it
         tree = cKDTree(self.centers, boxsize = self.boxsize)
+        pairs = tree.query_pairs(swell)
+        pairs = np.array(list(pairs), dtype=np.int64)
+        return pairs
+    
+    def _tag_xform(self, swell,xform_boxsize):
+        """ 
+        Get the center indices of the particles that overlap at a 
+        specific swell
+        
+        Parameters:
+            swell (float): diameter length of the particles
+
+        Returns:
+            (np.array): An array object whose elements are pairs of int values that correspond
+                the the center indices of overlapping particles
+        """
+
+        # Note cKD can retun numpy arrays in query pairs
+        # but there is a deallocation bug in the scipy.spatial code
+        # converting from a set to an array avoids it
+        tree = cKDTree(self.centers, xform_boxsize)
         pairs = tree.query_pairs(swell)
         pairs = np.array(list(pairs), dtype=np.int64)
         return pairs
@@ -150,6 +172,18 @@ class Monodisperse(ParticleSystem):
             count += 1
         return count
     
+    def xform_boxsize(self, scale_x, scale_y):
+        xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
+        xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
+        xform_boxsize = xform_boxsize_x*xform_boxsize_y
+        return xform_boxsize
+    
+    def invxform_boxsize(self, scale_x, scale_y):
+        xform_boxsize_x = (self.boxsize_x*scale_y/scale_x)
+        xform_boxsize_y = (self.boxsize_y*scale_x/scale_y)
+        xform_boxsize = xform_boxsize_x*xform_boxsize_y
+        return xform_boxsize
+    
     def train_xform(self, scale_x, scale_y, area_frac, kick, cycles=np.inf, noise=0):
         """
         Repeatedly transforms system by given amount in given direction, tags particles, transforms back
@@ -165,15 +199,14 @@ class Monodisperse(ParticleSystem):
         """
         count = 0
         swell = self.equiv_swell(area_frac)
-        pairs = self._tag(swell)
-        while (cycles > count and (len(pairs) > 0) ):
+        while (cycles > count and (len(self.centers) > 0) ):
             for i in self.centers: #Transform
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            self.wrap()
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            pairs = self._tag(swell) #Tag
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            xform_boxsize = self.xform_boxsize(scale_x, scale_y)
+            pairs = self._tag_xform(swell, xform_boxsize) #Tag
+            #self.inxform_boxsize(scale_x, scale_y)
             for i in self.centers: #Transform back
                 i[0] = i[0]*(1/scale_x)*(scale_y)
                 i[1] = i[1]*(1/scale_y)*(scale_x)
