@@ -360,9 +360,9 @@ class Monodisperse2(ParticleSystem2):
             filename (string): optional. Destination to save the plot. If None, the figure is not saved. 
         """
         radius = self.equiv_swell(area_frac)/2
-        xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
-        xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
-        boxsize = np.sqrt(self.boxsize)
+        xform_boxsize_x = (self.boxsize_x*(scale_x/scale_y))
+        xform_boxsize_y = (self.boxsize_y*(scale_y/scale_x))
+        boxsize = (self.boxsize)
         print(boxsize)
         print(xform_boxsize_x)
         print(xform_boxsize_y)
@@ -378,8 +378,8 @@ class Monodisperse2(ParticleSystem2):
         if (extend):
             plt.xlim(0, 2*xform_boxsize_x)
             plt.ylim(0, 2*xform_boxsize_y)
-            plt.plot([0, boxsize*2], [boxsize, boxsize], ls = ':', color = '#333333')
-            plt.plot([boxsize, boxsize], [0, boxsize*2], ls = ':', color = '#333333')
+            plt.plot([0, xform_boxsize_y*2], [xform_boxsize_y, xform_boxsize_y], ls = ':', color = '#333333')
+            plt.plot([xform_boxsize_x, xform_boxsize_x], [0, xform_boxsize_y*2], ls = ':', color = '#333333')
 
         else:
             plt.xlim(0, xform_boxsize_x)

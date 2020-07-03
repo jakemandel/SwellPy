@@ -32,7 +32,7 @@ class ParticleSystem2():
         self._name = "ParticleSystem2"
         self.N = N
         if (boxsize_x) and (boxsize_y):
-            self.boxsize = boxsize_x*boxsize_y
+            self.boxsize = np.sqrt(boxsize_x*boxsize_y)
             self.boxsize_x = boxsize_x
             self.boxsize_y = boxsize_y
         else:
