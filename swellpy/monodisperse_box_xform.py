@@ -17,7 +17,7 @@ class Monodisperse2(ParticleSystem2):
         """
         super(Monodisperse2, self).__init__(N, boxsize_x, boxsize_y, seed)
         self._name = "Monodisperse2"
-        self.boxsize = boxsize_x*boxsize_y
+        self.boxsize = np.sqrt(boxsize_x*boxsize_y)
     
     def equiv_swell(self, area_frac):
         """
@@ -203,7 +203,7 @@ class Monodisperse2(ParticleSystem2):
             for i in self.centers: #Transform
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
-            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             xform_boxsize = self.xform_boxsize(scale_x, scale_y)
             pairs = self._tag_xform(swell, xform_boxsize) #Tag
             #self.inxform_boxsize(scale_x, scale_y)
@@ -362,6 +362,10 @@ class Monodisperse2(ParticleSystem2):
         radius = self.equiv_swell(area_frac)/2
         xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
         xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
+        boxsize = np.sqrt(self.boxsize)
+        print(boxsize)
+        print(xform_boxsize_x)
+        print(xform_boxsize_y)
         fig = plt.figure(figsize = figsize)
         plt.axis('off')
         ax = plt.gca()
@@ -374,8 +378,8 @@ class Monodisperse2(ParticleSystem2):
         if (extend):
             plt.xlim(0, 2*xform_boxsize_x)
             plt.ylim(0, 2*xform_boxsize_y)
-            plt.plot([0, xform_boxsize_y*2], [xform_boxsize_x, xform_boxsize_y], ls = ':', color = '#333333')
-            plt.plot([xform_boxsize_x, xform_boxsize_y], [0, xform_boxsize_y*2], ls = ':', color = '#333333')
+            plt.plot([0, boxsize*2], [boxsize, boxsize], ls = ':', color = '#333333')
+            plt.plot([boxsize, boxsize], [0, boxsize*2], ls = ':', color = '#333333')
 
         else:
             plt.xlim(0, xform_boxsize_x)
