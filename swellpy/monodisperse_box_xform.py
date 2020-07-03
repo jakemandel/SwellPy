@@ -347,6 +347,44 @@ class Monodisperse2(ParticleSystem2):
         if show == True:
             plt.show()
         plt.close()
+        
+    def particle_plot_xformbox(self, xform_boxsize, area_frac, show=True, extend = False, figsize = (7,7), filename=None):
+        """
+        Show plot of physical particle placement in 2-D box 
+        
+        Args:
+            area_frac (float): The diameter length at which the particles are illustrated
+            show (bool): default True. Display the plot after generation
+            extend (bool): default False. Show wrap around the periodic boundary.
+            figsize ((int,int)): default (7,7). Scales the size of the figure
+            filename (string): optional. Destination to save the plot. If None, the figure is not saved. 
+        """
+        radius = self.equiv_swell(area_frac)/2
+        boxsize = xform_boxsize
+        fig = plt.figure(figsize = figsize)
+        plt.axis('off')
+        ax = plt.gca()
+        for pair in self.centers:
+            ax.add_artist(Circle(xy=(pair), radius = radius))
+            if (extend):
+                ax.add_artist(Circle(xy=(pair) + [0, boxsize], radius = radius, alpha=0.5))
+                ax.add_artist(Circle(xy=(pair) + [boxsize, 0], radius = radius, alpha=0.5))
+                ax.add_artist(Circle(xy=(pair) + [boxsize, boxsize], radius = radius, alpha=0.5))
+        if (extend):
+            plt.xlim(0, 2*boxsize)
+            plt.ylim(0, 2*boxsize)
+            plt.plot([0, boxsize*2], [boxsize, boxsize], ls = ':', color = '#333333')
+            plt.plot([boxsize, boxsize], [0, boxsize*2], ls = ':', color = '#333333')
+
+        else:
+            plt.xlim(0, boxsize)
+            plt.ylim(0, boxsize)
+        fig.tight_layout()
+        if filename != None:
+            plt.savefig(filename)
+        if show == True:
+            plt.show()
+        plt.close()
 
     def _tag_count(self, swells):
         """
