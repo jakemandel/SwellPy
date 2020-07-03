@@ -348,7 +348,7 @@ class Monodisperse2(ParticleSystem2):
             plt.show()
         plt.close()
         
-    def particle_plot_xformbox(self, xform_boxsize, area_frac, show=True, extend = False, figsize = (7,7), filename=None):
+    def particle_plot_xformbox(self, scale_x, scale_y, area_frac, show=True, extend = False, figsize = (7,7), filename=None):
         """
         Show plot of physical particle placement in 2-D box 
         
@@ -360,25 +360,26 @@ class Monodisperse2(ParticleSystem2):
             filename (string): optional. Destination to save the plot. If None, the figure is not saved. 
         """
         radius = self.equiv_swell(area_frac)/2
-        boxsize = xform_boxsize
+        xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
+        xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
         fig = plt.figure(figsize = figsize)
         plt.axis('off')
         ax = plt.gca()
         for pair in self.centers:
             ax.add_artist(Circle(xy=(pair), radius = radius))
             if (extend):
-                ax.add_artist(Circle(xy=(pair) + [0, boxsize], radius = radius, alpha=0.5))
-                ax.add_artist(Circle(xy=(pair) + [boxsize, 0], radius = radius, alpha=0.5))
-                ax.add_artist(Circle(xy=(pair) + [boxsize, boxsize], radius = radius, alpha=0.5))
+                ax.add_artist(Circle(xy=(pair) + [0, xform_boxsize_y], radius = radius, alpha=0.5))
+                ax.add_artist(Circle(xy=(pair) + [xform_boxsize_x, 0], radius = radius, alpha=0.5))
+                ax.add_artist(Circle(xy=(pair) + [xform_boxsize_x, xform_boxsize_y], radius = radius, alpha=0.5))
         if (extend):
-            plt.xlim(0, 2*boxsize)
-            plt.ylim(0, 2*boxsize)
-            plt.plot([0, boxsize*2], [boxsize, boxsize], ls = ':', color = '#333333')
-            plt.plot([boxsize, boxsize], [0, boxsize*2], ls = ':', color = '#333333')
+            plt.xlim(0, 2*xform_boxsize_x)
+            plt.ylim(0, 2*xform_boxsize_y)
+            plt.plot([0, xform_boxsize_y*2], [xform_boxsize_x, xform_boxsize_y], ls = ':', color = '#333333')
+            plt.plot([xform_boxsize_x, xform_boxsize_y], [0, xform_boxsize_y*2], ls = ':', color = '#333333')
 
         else:
-            plt.xlim(0, boxsize)
-            plt.ylim(0, boxsize)
+            plt.xlim(0, xform_boxsize_x)
+            plt.ylim(0, xform_boxsize_y)
         fig.tight_layout()
         if filename != None:
             plt.savefig(filename)
