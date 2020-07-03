@@ -191,7 +191,7 @@ class Monodisperse2(ParticleSystem2):
     def xform_boxsize(self, scale_x, scale_y):
         xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
         xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
-        xform_boxsize = xform_boxsize_x*xform_boxsize_y
+        xform_boxsize = np.sqrt(xform_boxsize_x*xform_boxsize_y)
         return xform_boxsize
     
     def invxform_boxsize(self, scale_x, scale_y):
@@ -214,12 +214,12 @@ class Monodisperse2(ParticleSystem2):
             (int) the number of tagging and repelling cycles until no particles overlapped
         """
         count = 0
-        swell = self.equiv_swell(area_frac)
+        swell = self.equiv_swell_xform(area_frac, scale_x, scale_y)
         while (cycles > count and (len(self.centers) > 0) ):
             for i in self.centers: #Transform
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
-            self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             xform_boxsize = self.xform_boxsize(scale_x, scale_y)
             pairs = self._tag_xform(swell, xform_boxsize) #Tag
             #self.inxform_boxsize(scale_x, scale_y)
@@ -375,7 +375,7 @@ class Monodisperse2(ParticleSystem2):
             figsize ((int,int)): default (7,7). Scales the size of the figure
             filename (string): optional. Destination to save the plot. If None, the figure is not saved. 
         """
-        radius = self.equiv_swell(area_frac)/2
+        radius = self.equiv_swell_xform(area_frac, scale_x, scale_y)/2
         xform_boxsize_x = (self.boxsize_x*(scale_x/scale_y))
         xform_boxsize_y = (self.boxsize_y*(scale_y/scale_x))
         boxsize = (self.boxsize)
