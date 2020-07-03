@@ -29,7 +29,7 @@ class Monodisperse2(ParticleSystem2):
             (float): the equivalent diameter
         """
         af = np.array(area_frac, ndmin=1)
-        return 2 * np.sqrt(af * self.boxsize**2 / (self.N * np.pi))
+        return 2 * np.sqrt(af * self.boxsize_x*self.boxsize_y / (self.N * np.pi))
 
     def equiv_area_frac(self, swell):
         """
@@ -203,7 +203,7 @@ class Monodisperse2(ParticleSystem2):
             for i in self.centers: #Transform
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
-            self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             xform_boxsize = self.xform_boxsize(scale_x, scale_y)
             pairs = self._tag_xform(swell, xform_boxsize) #Tag
             #self.inxform_boxsize(scale_x, scale_y)
