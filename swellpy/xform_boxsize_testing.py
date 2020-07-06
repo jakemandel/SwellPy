@@ -19,13 +19,13 @@ m = Monodisperse2(N,Bx,By,seed)
 
 #Define: important variables that you need. Natasha goes over these in her paper.
 area_frac = 0.5 # area fraction
-kick = .06
+kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 1 #This is the number of swells  you do to your system.
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
-m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0)
+m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
