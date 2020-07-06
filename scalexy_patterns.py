@@ -29,11 +29,12 @@ cycle_number = 1 #This is the number of shears that you do to your system.
 # Transform 'Box' back to original magnitude(starting scale)
 # Apply kicks to particles that are tagged
 
-m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-     
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
+#m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)    
 
-m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+m.train_xform(1, 1, area_frac, kick, cycle_number, noise=0)
+
+
+#m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 # area_frac_array = np.array(np.linspace(0,1,100))
 # m.tag_plot(area_frac_array, mode='count', show=True, filename=None)

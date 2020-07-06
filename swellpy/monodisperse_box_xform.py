@@ -80,7 +80,7 @@ class Monodisperse2(ParticleSystem2):
         pairs = np.array(list(pairs), dtype=np.int64)
         return pairs
     
-    def _tag_xform(self, swell,xform_boxsize):
+    def _tag_xform(self, swell, xform_boxsize_x, xform_boxsize_y):
         """ 
         Get the center indices of the particles that overlap at a 
         specific swell
@@ -96,7 +96,7 @@ class Monodisperse2(ParticleSystem2):
         # Note cKD can retun numpy arrays in query pairs
         # but there is a deallocation bug in the scipy.spatial code
         # converting from a set to an array avoids it
-        tree = cKDTree(self.centers, xform_boxsize)
+        tree = cKDTree(self.centers, boxsize = (xform_boxsize_x, xform_boxsize_y))
         pairs = tree.query_pairs(swell)
         pairs = np.array(list(pairs), dtype=np.int64)
         return pairs
@@ -220,8 +220,9 @@ class Monodisperse2(ParticleSystem2):
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
             #self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            xform_boxsize = self.xform_boxsize(scale_x, scale_y)
-            pairs = self._tag_xform(swell, xform_boxsize) #Tag
+            xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
+            xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
+            pairs = self._tag_xform(swell, xform_boxsize_x, xform_boxsize_y) #Tag
             #self.inxform_boxsize(scale_x, scale_y)
             for i in self.centers: #Transform back
                 i[0] = i[0]*(1/scale_x)*(scale_y)

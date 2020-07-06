@@ -170,9 +170,9 @@ class Monodisperse(ParticleSystem):
             for i in self.centers: #Transform
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            self.wrap()
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.wrap()
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             pairs = self._tag(swell) #Tag
             for i in self.centers: #Transform back
                 i[0] = i[0]*(1/scale_x)*(scale_y)
