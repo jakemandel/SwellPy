@@ -219,13 +219,13 @@ class Monodisperse2(ParticleSystem2):
         xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
         while (cycles > count and (len(self.centers) > 0) ):
             for i in self.centers: #Transform
-                i[0] = i[0]*(scale_x)*(1/scale_y)
-                i[1] = i[1]*(scale_y)*(1/scale_x)
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
             #self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             pairs = self._tag_xform(swell, xform_boxsize_x, xform_boxsize_y) #Tag with box xformed also
             for i in self.centers: #Transform back
-                i[0] = i[0]*(1/scale_x)*(scale_y)
-                i[1] = i[1]*(1/scale_y)*(scale_x)
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
             self._repel(pairs, swell, kick)
             self.pos_noise(noise)
             self.wrap()

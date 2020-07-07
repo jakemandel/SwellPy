@@ -95,12 +95,13 @@ m = Monodisperse2(N,Bx,By,seed)
 area_frac = 0.5 # area fraction
 swell = m.equiv_swell(area_frac)
 kick = .05
-cycle_number = 15 #This is the number of shears that you do to your system.
+cycle_number = 20 #This is the number of shears that you do to your system.
 
 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -108,7 +109,8 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -116,7 +118,8 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0) 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -124,7 +127,8 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax1 = sns.distplot(x, kde=True, norm_hist=True,)
@@ -132,7 +136,8 @@ ax1 = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -140,7 +145,8 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0) 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
