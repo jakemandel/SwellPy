@@ -214,7 +214,7 @@ class Monodisperse2(ParticleSystem2):
             (int) the number of tagging and repelling cycles until no particles overlapped
         """
         count = 0
-        swell = self.equiv_swell_xform(area_frac, scale_x, scale_y)
+        swell = self.equiv_swell(area_frac)
         xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
         xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
         while (cycles > count and (len(self.centers) > 0) ):
@@ -222,8 +222,7 @@ class Monodisperse2(ParticleSystem2):
                 i[0] = i[0]*(scale_x)*(1/scale_y)
                 i[1] = i[1]*(scale_y)*(1/scale_x)
             #self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            pairs = self._tag_xform(swell, xform_boxsize_x, xform_boxsize_y) #Tag
-            #self.inxform_boxsize(scale_x, scale_y)
+            pairs = self._tag_xform(swell, xform_boxsize_x, xform_boxsize_y) #Tag with box xformed also
             for i in self.centers: #Transform back
                 i[0] = i[0]*(1/scale_x)*(scale_y)
                 i[1] = i[1]*(1/scale_y)*(scale_x)
