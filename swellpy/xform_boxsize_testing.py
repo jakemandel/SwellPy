@@ -42,7 +42,8 @@ print(memory)
 #On x-axis
 for i in m.centers: # Transform
     i[0] = i[0]*.9
-    i[1] = i[1]*1
+    i[1] = i[1]/.9
+
 area_frac_array = np.array(np.linspace(0,1,100))
 m.tag_plot(area_frac_array, mode='count', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='rate', show=True, filename=None)

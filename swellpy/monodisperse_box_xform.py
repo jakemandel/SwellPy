@@ -552,3 +552,148 @@ class Monodisperse2(ParticleSystem2):
                     if (desc):
                         matches.append(i)
         return area_frac[matches]
+    
+    
+    def _tag_count_xform(self, swells):
+        """
+        Returns the number of tagged pairs at a specific area fraction
+        
+        Args:
+            swell (float): swollen diameter length of the particles
+
+        Returns:
+            (float): The fraction of overlapping particles
+        """
+        i = 0
+        tagged = np.zeros(swells.size)
+        while i < swells.size:
+            temp = self._tag(swells[i])
+            tagged[i] = np.unique(temp).size/ self.N
+            i += 1
+        return tagged
+    
+    def tag_count_xform(self, area_frac):
+        """
+        Returns the number of tagged pairs at a specific area fraction
+        
+        Args:
+            area_frac (float): area fraction of the particles
+
+        Returns:
+            (float): The fraction of overlapping particles
+        """
+        swells = self.equiv_swell(area_frac)
+        return self._tag_count(swells)
+
+    def _extend_domain_xform(self, domain):
+        """
+        Inserts a value at the beginning of the domain equal to the separation between the first
+        two values, and a value at the end of the array determined by the separation of the last
+        two values
+
+        Args:
+            domain (np.array): array to extend
+        Return:
+            (np.array) extended domain array
+        """
+        first = 2 * domain[0] - domain[1]
+        if (first < 0):
+            first = 0
+        last = 2 * domain[-1] - domain[-2]
+        domain_extend = np.insert(domain, 0, first)
+        domain_extend = np.append(domain_extend, last)
+        return domain_extend
+
+    
+    def tag_rate_xform(self, area_frac):
+        """
+        Returns the rate at which the fraction of particles overlap over a range of area fractions.
+        This is the same as measuring the fraction tagged at two area fractions and dividing by the 
+        difference of the area fractions. 
+        
+        Args:
+            area_frac (np.array): array fractions to calculate tag rate at
+
+        Returns:
+            (np.array): The rate of the fraction of tagged particles at area fraction in the input array
+        """
+        af_extended = self._extend_domain(area_frac)
+        tagged = self.tag_count(af_extended)
+        rate = (tagged[2:] - tagged[:-2])
+        return rate
+
+    def tag_curve_xform(self, area_frac):
+        """
+        Returns the curvature at which the fraction of particles overlap over a range of area fractions.
+        This is the same as measuring the rate at two area fractions and dividing by the difference
+        of the area fractions. 
+        
+        Args:
+            area_frac (np.array): array fractions to calculate the tag curvature at
+
+        Returns:
+            (np.array): The curvature of the fraction of tagged particles at area fraction in the input array
+        """
+        af_extended = self._extend_domain(area_frac)
+        rate = self.tag_rate(af_extended)
+        curve = (rate[2:] - rate[:-2])
+        return curve
+
+    def tag_plot_xform(self, area_frac, mode='count', show=True, filename=None):
+        """
+        Generates a plot of the tag count, rate, or curvature
+
+        Args:
+            area_frac (np.array): list of the area fractions to use in the plot
+            mode ("count"|"rate"|"curve"): which information you want to plot. Defaults to "count".
+            show (bool): default True. Whether or not to show the plot
+            filename (string): default None. Filename to save the plot as. If filename=None, the plot is not saved.
+        """
+        if (mode == 'curve'):
+            plt.ylabel('Curve')
+            func = self.tag_curve
+        elif (mode == 'rate'):
+            plt.ylabel('Rate')
+            func = self.tag_rate
+        else:
+            plt.ylabel('Count')
+            func = self.tag_count
+        data = func(area_frac) 
+        plt.plot(area_frac, data)
+        plt.xlabel("Area Fraction")
+        if filename:
+            plt.savefig(filename)
+        if show == True:
+            plt.show()
+        plt.close()
+
+    def detect_memory_xform(self, start, end, incr):
+        """
+        Tests the number of tagged particles over a range of area fractions, and 
+        returns a list of area fractions where memories are detected. 
+        
+        Args:
+            start (float): The first area fraction in the detection
+            end (float): The last area fraction in the detection
+            incr (float): The increment between test swells. Determines accuracy of the memory detection. 
+        Returns:
+            (np.array): list of swells where a memory is located
+        """
+        area_frac = np.arange(start, end, incr)
+        curve = self.tag_curve(area_frac)
+        zeros = np.zeros(curve.shape)
+        pos = np.choose(curve < 0, [curve, zeros])
+        neg = np.choose(curve > 0, [curve, zeros])
+        indices = peak.indexes(pos, 0.5, incr)
+        nindices = peak.indexes(-neg, 0.5, incr)
+        matches = []
+        for i in indices:
+            for j in nindices:
+                desc = True
+                if (i < j):
+                    for k in range(i,j):
+                        if (curve[k] < curve[k+1]):
+                            desc = False
+                    if (desc):
+                        matches.append(i)
+        return area_frac[matches]
