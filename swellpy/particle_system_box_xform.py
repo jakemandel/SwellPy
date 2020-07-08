@@ -100,7 +100,7 @@ class ParticleSystem2():
         np.putmask(separation, separation > swell, separation - boxsize)
         np.putmask(separation, separation < -swell, separation + boxsize)
         # Normalize
-        norm = np.linalg.norm(separation, axis=None).flatten()
+        norm = np.linalg.norm(separation, axis=2).flatten()
         unitSeparation = (separation.T/norm).T
         # Generate kick
         kick_arr = (unitSeparation.T * np.random.uniform(0, kick, unitSeparation.shape[0])).T
