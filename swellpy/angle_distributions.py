@@ -15,7 +15,7 @@ import pandas as pd
 '''
 Write Memory on x-axis
 '''
-'''
+
 # initialize the parameters in the class of methods (N,B,seed)
 # The code in the monodisperse module lays out how each method works
 N = 1000 #number of particles
@@ -28,60 +28,67 @@ m = Monodisperse2(N,Bx,By,seed)
 area_frac = 0.5 # area fraction
 swell = m.equiv_swell(area_frac)
 kick = .05
-cycle_number = 15 #This is the number of shears that you do to your system.
+cycle_number = 10 #This is the number of shears that you do to your system.
 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
+m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0) 
+m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0) 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
+m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
+m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0) 
+m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0) 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta1 = m.find_angle2(pairs)
+theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
-'''
+m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
+
 
 '''
 Write Memory on y-axis
+'''
 '''
 # initialize the parameters in the class of methods (N,B,seed)
 # The code in the monodisperse module lays out how each method works
@@ -152,7 +159,7 @@ sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
 
 m.train_xform(1, .8, area_frac, kick, cycle_number, noise=0)
-
+'''
 
 
 '''

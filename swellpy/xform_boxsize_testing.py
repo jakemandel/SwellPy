@@ -21,11 +21,11 @@ m = Monodisperse2(N,Bx,By,seed)
 area_frac = 0.5 # area fraction
 kick = .05
 swell = m.equiv_swell(area_frac)
-cycle_number = 80 #This is the number of swells  you do to your system.
+cycle_number = 100 #This is the number of swells  you do to your system.
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
-m.train_xform(.8, 1, area_frac, kick, cycle_number, noise=0)
+m.train_xform(.85, 1, area_frac, kick, cycle_number, noise=0)
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -36,18 +36,22 @@ area_frac_array = np.array(np.linspace(0,1,100))
 m.tag_plot(area_frac_array, mode='count', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='rate', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='curve', show=True, filename=None)
+memory = m.detect_memory(0, 1, .01)
+print(memory)
+'''
 #On x-axis
 for i in m.centers: # Transform
-    i[0] = i[0]*.8
-    i[1] = i[1]*1/.8
+    i[0] = i[0]*.9
+    i[1] = i[1]*1
 area_frac_array = np.array(np.linspace(0,1,100))
 m.tag_plot(area_frac_array, mode='count', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='rate', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='curve', show=True, filename=None)
 for i in m.centers: # Transform back and read on y axis
-    i[0] = i[0]*(1/(.8**2))
-    i[1] = i[1]*.8
+    i[0] = i[0]*(1/.9)
+    i[1] = i[1]*.9
     area_frac_array = np.array(np.linspace(0,1,100))
 m.tag_plot(area_frac_array, mode='count', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='rate', show=True, filename=None)
 m.tag_plot(area_frac_array, mode='curve', show=True, filename=None)
+'''
