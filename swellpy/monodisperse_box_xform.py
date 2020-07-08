@@ -134,7 +134,7 @@ class Monodisperse2(ParticleSystem2):
             x2 = self.centers[i[1]][0] # x-coordinate of second particle
             y1 = self.centers[i[0]][1] # y-coordinate of first particle
             y2 = self.centers[i[1]][1] # y-coordinate of second particle
-            angle = np.arctan2((y2-y1),(x2-x1))*(180/np.pi) # angle in degrees
+            angle = np.arctan2((y2-y1),(x2-x1))#*(180/np.pi) # angle in degrees
             theta.append(angle)
         return theta
     
