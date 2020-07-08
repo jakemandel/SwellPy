@@ -18,6 +18,8 @@ class Monodisperse2(ParticleSystem2):
         super(Monodisperse2, self).__init__(N, boxsize_x, boxsize_y, seed)
         self._name = "Monodisperse2"
         self.boxsize = np.sqrt(boxsize_x*boxsize_y)
+        self.boxsize_x = boxsize_x
+        self.boxsize_y = boxsize_y
     
     def equiv_swell(self, area_frac):
         """
@@ -218,12 +220,12 @@ class Monodisperse2(ParticleSystem2):
         xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
         xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
         while (cycles > count and (len(self.centers) > 0) ):
-            for i in self.centers: #Transform
+            for i in self.centers: #Transform centers
                 i[0] = i[0]*(scale_x/scale_y)
                 i[1] = i[1]*(scale_y/scale_x)
             #self.particle_plot_xformbox(scale_x, scale_y, area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             pairs = self._tag_xform(swell, xform_boxsize_x, xform_boxsize_y) #Tag with box xformed also
-            for i in self.centers: #Transform back
+            for i in self.centers: #Transform centers back
                 i[0] = i[0]*(scale_y/scale_x)
                 i[1] = i[1]*(scale_x/scale_y)
             self._repel(pairs, swell, kick)
