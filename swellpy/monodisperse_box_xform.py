@@ -228,6 +228,8 @@ class Monodisperse2(ParticleSystem2):
             for i in self.centers: #Transform centers back
                 i[0] = i[0]*(scale_y/scale_x)
                 i[1] = i[1]*(scale_x/scale_y)
+            if len(pairs) == 0:
+                continue
             self._repel(pairs, swell, kick)
             self.pos_noise(noise)
             self.wrap()
