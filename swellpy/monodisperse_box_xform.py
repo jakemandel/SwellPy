@@ -219,7 +219,8 @@ class Monodisperse2(ParticleSystem2):
         swell = self.equiv_swell(area_frac)
         xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
         xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
-        while (cycles > count and (len(self.centers) > 0) ):
+        pairs = self._tag(swell)
+        while (cycles > count and (len(pairs) > 0) ):
             for i in self.centers: #Transform centers
                 i[0] = i[0]*(scale_x/scale_y)
                 i[1] = i[1]*(scale_y/scale_x)
@@ -229,7 +230,7 @@ class Monodisperse2(ParticleSystem2):
                 i[0] = i[0]*(scale_y/scale_x)
                 i[1] = i[1]*(scale_x/scale_y)
             if len(pairs) == 0:
-                continue
+                continue    
             self._repel(pairs, swell, kick)
             self.pos_noise(noise)
             self.wrap()
