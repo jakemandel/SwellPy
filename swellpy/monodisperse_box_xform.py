@@ -700,4 +700,7 @@ class Monodisperse2(ParticleSystem2):
                             desc = False
                     if (desc):
                         matches.append(i)
+        for i in self.centers: #Transform centers back
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
         return area_frac[matches]
