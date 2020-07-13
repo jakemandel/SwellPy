@@ -192,8 +192,8 @@ class Monodisperse2(ParticleSystem2):
         Repeatedly transforms system by given amount in given direction, tags particles, transforms back
         to original scale and repels the tagged particles when system what transformed. For some number of cycles
         Args:
-            scale_x: scale x-coordinates of centers of particles
-            scale_y: scale y-coordinates of centers of particles
+            scale_x: scale system in x-direction
+            scale_y: scale system in y-direction
             area_frac (float): the area fraction to train on
             kick (float): the maximum distance particles are repelled
             cycles (int): The upper bound on the number of cycles. Defaults to infinite.
@@ -260,7 +260,6 @@ class Monodisperse2(ParticleSystem2):
     #         return count
                     
 
-
     def train_rotxform(self, degrees, scale, area_frac, kick, cycles=np.inf, noise=0):
         """ 
         Rotates system by input degrees, system is scaled by a factor of input scale value, overlapping particles
@@ -295,20 +294,19 @@ class Monodisperse2(ParticleSystem2):
                 i[1] = i[1]*scale
             for i in self.centers:
                 i[0] = i[0]*(1/scale) # Scale perp axis to keep area the same
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            self.wrap()
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.wrap()
             pairs = self._tag(swell) # Tag
             r_inv = np.linalg.inv(r)   # Inverse Transform Matrix
             for i in self.centers: # scale
                 i[1] = i[1]*(1/scale)
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             for i in self.centers:
                 i[0] = i[0]*(scale) 
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             for i in self.centers:
                 [i[0], i[1]] = np.dot(r_inv, [i[0], i[1]])
-            self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
-            
+            #self.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
             self._repel(pairs, swell, kick)
             self.pos_noise(noise)
             self.wrap()
@@ -544,7 +542,7 @@ class Monodisperse2(ParticleSystem2):
     
     
     
-    def _tag_count_xform(self, swells):
+    def _tag_count_xform(self, swells, scale_x, scale_y):
         """
         Returns the number of tagged pairs at a specific area fraction
         
@@ -556,8 +554,10 @@ class Monodisperse2(ParticleSystem2):
         """
         i = 0
         tagged = np.zeros(swells.size)
+        xform_boxsize_x = (self.boxsize_x*(scale_x/scale_y))
+        xform_boxsize_y = (self.boxsize_y*(scale_y/scale_x))
         while i < swells.size:
-            temp = self._tag(swells[i])
+            temp = self._tag_xform(swells[i], xform_boxsize_x, xform_boxsize_y)
             tagged[i] = np.unique(temp).size/ self.N
             i += 1
         return tagged
@@ -573,29 +573,32 @@ class Monodisperse2(ParticleSystem2):
             (float): The fraction of overlapping particles
         """
         swells = self.equiv_swell(area_frac)
-        return self._tag_count(swells)
+        return self._tag_count_xform(swells, scale_x, scale_y)
 
-    def _extend_domain_xform(self, domain):
-        """
-        Inserts a value at the beginning of the domain equal to the separation between the first
-        two values, and a value at the end of the array determined by the separation of the last
-        two values
+    '''
+    Use original extend domain function
+    '''
+    # def _extend_domain_xform(self, domain):
+    #     """
+    #     Inserts a value at the beginning of the domain equal to the separation between the first
+    #     two values, and a value at the end of the array determined by the separation of the last
+    #     two values
 
-        Args:
-            domain (np.array): array to extend
-        Return:
-            (np.array) extended domain array
-        """
-        first = 2 * domain[0] - domain[1]
-        if (first < 0):
-            first = 0
-        last = 2 * domain[-1] - domain[-2]
-        domain_extend = np.insert(domain, 0, first)
-        domain_extend = np.append(domain_extend, last)
-        return domain_extend
+    #     Args:
+    #         domain (np.array): array to extend
+    #     Return:
+    #         (np.array) extended domain array
+    #     """
+    #     first = 2 * domain[0] - domain[1]
+    #     if (first < 0):
+    #         first = 0
+    #     last = 2 * domain[-1] - domain[-2]
+    #     domain_extend = np.insert(domain, 0, first)
+    #     domain_extend = np.append(domain_extend, last)
+    #     return domain_extend
 
     
-    def tag_rate_xform(self, area_frac):
+    def tag_rate_xform(self, area_frac, scale_x, scale_y):
         """
         Returns the rate at which the fraction of particles overlap over a range of area fractions.
         This is the same as measuring the fraction tagged at two area fractions and dividing by the 
@@ -608,11 +611,11 @@ class Monodisperse2(ParticleSystem2):
             (np.array): The rate of the fraction of tagged particles at area fraction in the input array
         """
         af_extended = self._extend_domain(area_frac)
-        tagged = self.tag_count(af_extended)
+        tagged = self.tag_count_xform(af_extended, scale_x, scale_y)
         rate = (tagged[2:] - tagged[:-2])
         return rate
 
-    def tag_curve_xform(self, area_frac):
+    def tag_curve_xform(self, area_frac, scale_x, scale_y):
         """
         Returns the curvature at which the fraction of particles overlap over a range of area fractions.
         This is the same as measuring the rate at two area fractions and dividing by the difference
@@ -625,15 +628,17 @@ class Monodisperse2(ParticleSystem2):
             (np.array): The curvature of the fraction of tagged particles at area fraction in the input array
         """
         af_extended = self._extend_domain(area_frac)
-        rate = self.tag_rate(af_extended)
+        rate = self.tag_rate_xform(af_extended, scale_x, scale_y)
         curve = (rate[2:] - rate[:-2])
         return curve
 
-    def tag_plot_xform(self, area_frac, mode='count', show=True, filename=None):
+    def tag_plot_xform(self, scale_x = 1, scale_y = 1, area_frac, mode='count', show=True, filename=None):
         """
         Generates a plot of the tag count, rate, or curvature
 
         Args:
+            scale_x (float, optional):
+            scale_y (float, optional):
             area_frac (np.array): list of the area fractions to use in the plot
             mode ("count"|"rate"|"curve"): which information you want to plot. Defaults to "count".
             show (bool): default True. Whether or not to show the plot
@@ -641,13 +646,13 @@ class Monodisperse2(ParticleSystem2):
         """
         if (mode == 'curve'):
             plt.ylabel('Curve')
-            func = self.tag_curve
+            func = self.tag_curve_xform
         elif (mode == 'rate'):
             plt.ylabel('Rate')
-            func = self.tag_rate
+            func = self.tag_rate_xform
         else:
             plt.ylabel('Count')
-            func = self.tag_count
+            func = self.tag_count_xform
         data = func(area_frac) 
         plt.plot(area_frac, data)
         plt.xlabel("Area Fraction")
@@ -657,7 +662,7 @@ class Monodisperse2(ParticleSystem2):
             plt.show()
         plt.close()
 
-    def detect_memory_xform(self, start, end, incr):
+    def detect_memory_xform(self, start, end, incr, scale_x = 1,scale_y = 1):
         """
         Tests the number of tagged particles over a range of area fractions, and 
         returns a list of area fractions where memories are detected. 
@@ -670,7 +675,7 @@ class Monodisperse2(ParticleSystem2):
             (np.array): list of swells where a memory is located
         """
         area_frac = np.arange(start, end, incr)
-        curve = self.tag_curve(area_frac)
+        curve = self.tag_curve_xform(area_frac, scale_x, scale_y)
         zeros = np.zeros(curve.shape)
         pos = np.choose(curve < 0, [curve, zeros])
         neg = np.choose(curve > 0, [curve, zeros])
