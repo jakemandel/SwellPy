@@ -12,7 +12,8 @@ class Monodisperse2(ParticleSystem2):
         """
         Args:
             N (int): The number of particles in the system
-            boxsize (float): optional. Length of the sides of the box
+            boxsize_x (float): optional. Length of the side(x) of the box
+            boxsize_x (float): optional. Length of the side(y) of the box
             seed (int): optional. Seed for initial particle placement randomiztion
         """
         super(Monodisperse2, self).__init__(N, boxsize_x, boxsize_y, seed)
@@ -35,7 +36,9 @@ class Monodisperse2(ParticleSystem2):
     
     def equiv_swell_xform(self, area_frac, scale_x, scale_y):
         """
-        Finds the particle diameter that is equivalent to some area fraction.
+        Finds the particle diameter that is equivalent to some area fraction, takes in account
+        transformation scaling factors.
+        ***SHOULD NOT NEED TO BE USED***
 
         Args:
             area_frac (float): the area fraction of interest
@@ -85,10 +88,12 @@ class Monodisperse2(ParticleSystem2):
     def _tag_xform(self, swell, xform_boxsize_x, xform_boxsize_y):
         """ 
         Get the center indices of the particles that overlap at a 
-        specific swell
+        specific swell. Takes in account the transformation of boxsize.
         
         Parameters:
             swell (float): diameter length of the particles
+            xform_boxsize_x (float): X transform boxsize
+            xform_boxsize_y (float): Y transform boxsize
 
         Returns:
             (np.array): An array object whose elements are pairs of int values that correspond
@@ -103,28 +108,8 @@ class Monodisperse2(ParticleSystem2):
         pairs = np.array(list(pairs), dtype=np.int64)
         return pairs
     
-    def find_angle(self, pairs):
-        """
-        Finds the kick angles with respect to the first particle.
-        """
-        theta = []
-        for i in pairs:
-            x1 = self.centers[i[0]][0] # x-coordinate of first particle
-            x2 = self.centers[i[1]][0] # x-coordinate of second particle
-            y1 = self.centers[i[0]][1] # y-coordinate of first particle
-            y2 = self.centers[i[1]][1] # y-coordinate of second particle
-            t1 = np.arctan((y2-y1)/(x2-x1))*(180/np.pi)
-            if t1 < 0:
-                t1 = t1 + 360
-            if t1 > 180:
-                t2 = t1 - 180
-            else:
-                t2 = t1 + 180
-            theta.append(t1)
-            theta.append(t2)
-        return theta
     
-    def find_angle2(self, pairs):
+    def find_angle(self, pairs):
         """
         Finds the kick angles with respect to the first particle.
         """
@@ -555,6 +540,8 @@ class Monodisperse2(ParticleSystem2):
                     if (desc):
                         matches.append(i)
         return area_frac[matches]
+    
+    
     
     
     def _tag_count_xform(self, swells):

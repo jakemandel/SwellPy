@@ -29,8 +29,8 @@ area_frac = 0.5 # area fraction
 swell = m.equiv_swell(area_frac)
 kick = .05
 cycle_number = 15 #This is the number of shears that you do to your system.
-scale_x = 1
-scale_y = .1
+scale_x = .9
+scale_y = 1
 
 
 kwargs = dict(hist_kws={'alpha':.6}, kde_kws={'linewidth':2})
@@ -39,7 +39,7 @@ sns.set_style('darkgrid')
 
 pairs = m._tag(swell)
 print(len(pairs))
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta(radians)")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="initial", **kwargs)
@@ -49,7 +49,7 @@ m.train_xform(scale_x, scale_y, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
 print(len(pairs))
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 15 cycles", **kwargs)
@@ -58,7 +58,7 @@ m.train_xform(scale_x, scale_y, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
 print(len(pairs))
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta (radians)")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 30 cycles", **kwargs)
@@ -67,7 +67,7 @@ m.train_xform(scale_x, scale_y, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
 print(len(pairs))
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta (radians)")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 45 cycles", **kwargs)

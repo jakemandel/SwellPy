@@ -35,7 +35,7 @@ plt.figure(figsize=(10,7), dpi= 80)
 sns.set_style('darkgrid')
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta(radians)")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="initial", **kwargs)
@@ -43,7 +43,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="initial", **kwarg
 m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 10 cycles", **kwargs)
@@ -51,7 +51,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 10 cycles",
 m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0) 
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 20 cycles", **kwargs)
@@ -59,7 +59,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 20 cycles",
 m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 30 cycles", **kwargs)
@@ -67,7 +67,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 30 cycles",
 m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta (radians)")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 40 cycles", **kwargs)
@@ -75,7 +75,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 40 cycles",
 #m.train_xform(.95, 1, area_frac, kick, cycle_number, noise=0) 
 
 # pairs = m._tag(swell)
-# theta1 = m.find_angle2(pairs)
+# theta1 = m.find_angle(pairs)
 # theta = [value for value in theta1 if value > 0]
 # x = pd.Series(theta, name="Theta(radians)")
 # ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 50 cycles", **kwargs)
@@ -108,7 +108,7 @@ sns.set_style('darkgrid')
 
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="initial", **kwargs)
@@ -116,7 +116,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="initial", **kwarg
 m.train_xform(1, .95, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 10 cycles", **kwargs)
@@ -124,7 +124,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 10 cycles",
 m.train_xform(1, .95, area_frac, kick, cycle_number, noise=0) 
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 20 cycles", **kwargs)
@@ -132,7 +132,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 20 cycles",
 m.train_xform(1, .95, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta")
 ax1 = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 30 cycles", **kwargs)
@@ -140,7 +140,7 @@ ax1 = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 30 cycles"
 m.train_xform(1, .95, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta1 = m.find_angle2(pairs)
+theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
 x = pd.Series(theta, name="Theta (radians)")
 ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 40 cycles", **kwargs)
@@ -148,7 +148,7 @@ ax = sns.distplot(x, bins=10, kde=True, norm_hist=True, label="after 40 cycles",
 #m.train_xform(1, .95, area_frac, kick, cycle_number, noise=0) 
 
 # pairs = m._tag(swell)
-# theta1 = m.find_angle2(pairs)
+# theta1 = m.find_angle(pairs)
 # theta = [value for value in theta1 if value > 0]
 # x = pd.Series(theta, name="Theta")
 # sns.set_style('darkgrid')
@@ -178,7 +178,7 @@ cycle_number = 15 #This is the number of shears that you do to your system.
 
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta = m.find_angle(pairs)
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -186,7 +186,7 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(.8, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta = m.find_angle(pairs)
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -194,7 +194,7 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(.8, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta = m.find_angle(pairs)
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -202,7 +202,7 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(.8, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta = m.find_angle(pairs)
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax1 = sns.distplot(x, kde=True, norm_hist=True,)
@@ -210,7 +210,7 @@ ax1 = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(.8, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta = m.find_angle(pairs)
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
@@ -218,7 +218,7 @@ ax = sns.distplot(x, kde=True, norm_hist=True,)
 m.train_xform(.8, .8, area_frac, kick, cycle_number, noise=0)
 
 pairs = m._tag(swell)
-theta = m.find_angle2(pairs)
+theta = m.find_angle(pairs)
 x = pd.Series(theta, name="Theta")
 sns.set_style('darkgrid')
 ax = sns.distplot(x, kde=True, norm_hist=True,)
