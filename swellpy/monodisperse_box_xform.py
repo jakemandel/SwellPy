@@ -562,7 +562,7 @@ class Monodisperse2(ParticleSystem2):
             i += 1
         return tagged
     
-    def tag_count_xform(self, area_frac):
+    def tag_count_xform(self, area_frac, scale_x, scale_y):
         """
         Returns the number of tagged pairs at a specific area fraction
         
@@ -632,7 +632,7 @@ class Monodisperse2(ParticleSystem2):
         curve = (rate[2:] - rate[:-2])
         return curve
 
-    def tag_plot_xform(self, scale_x = 1, scale_y = 1, area_frac, mode='count', show=True, filename=None):
+    def tag_plot_xform(self, scale_x, scale_y, area_frac, mode='count', show=True, filename=None):
         """
         Generates a plot of the tag count, rate, or curvature
 
@@ -644,6 +644,9 @@ class Monodisperse2(ParticleSystem2):
             show (bool): default True. Whether or not to show the plot
             filename (string): default None. Filename to save the plot as. If filename=None, the plot is not saved.
         """
+        for i in self.centers: #Transform centers along readout axis
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
         if (mode == 'curve'):
             plt.ylabel('Curve')
             func = self.tag_curve_xform
@@ -653,9 +656,12 @@ class Monodisperse2(ParticleSystem2):
         else:
             plt.ylabel('Count')
             func = self.tag_count_xform
-        data = func(area_frac) 
+        data = func(area_frac, scale_x, scale_y) 
         plt.plot(area_frac, data)
         plt.xlabel("Area Fraction")
+        for i in self.centers: #Transform centers back
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
         if filename:
             plt.savefig(filename)
         if show == True:
@@ -674,6 +680,9 @@ class Monodisperse2(ParticleSystem2):
         Returns:
             (np.array): list of swells where a memory is located
         """
+        for i in self.centers: #Transform centers along readout axis
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
         area_frac = np.arange(start, end, incr)
         curve = self.tag_curve_xform(area_frac, scale_x, scale_y)
         zeros = np.zeros(curve.shape)

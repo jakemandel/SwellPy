@@ -25,18 +25,21 @@ cycle_number = 50 #This is the number of swells  you do to your system.
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
-m.train_xform(1, 1, area_frac, kick, cycle_number, noise=0)
+m.train_xform(1, .9, area_frac, kick, cycle_number, noise=0)
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 #Actual Area Fraction = 
 #Read out
 #Isotropic
+#Read along x-axis
+scale_x = .9
+scale_y = 1
 area_frac_array = np.array(np.linspace(0,1,100))
-m.tag_plot(area_frac_array, mode='count', show=True, filename=None)
-m.tag_plot(area_frac_array, mode='rate', show=True, filename=None)
-m.tag_plot(area_frac_array, mode='curve', show=True, filename=None)
-memory = m.detect_memory(0, 1, .01)
+m.tag_plot_xform(scale_x, scale_y, area_frac_array, mode='count', show=True, filename=None)
+m.tag_plot_xform(scale_x, scale_y, area_frac_array, mode='rate', show=True, filename=None)
+m.tag_plot_xform(scale_x, scale_y, area_frac_array, mode='curve', show=True, filename=None)
+memory = m.detect_memory_xform(0, 1, .01, scale_x, scale_y)
 print(memory)
 '''
 #On x-axis
