@@ -21,7 +21,7 @@ m = Monodisperse2(N,Bx,By,seed)
 area_frac = 0.5 # area fraction
 kick = .05
 swell = m.equiv_swell(area_frac)
-cycle_number = 50 #This is the number of swells  you do to your system.
+cycle_number = 300 #This is the number of swells  you do to your system.
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
