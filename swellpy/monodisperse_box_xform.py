@@ -187,6 +187,16 @@ class Monodisperse2(ParticleSystem2):
         xform_boxsize = xform_boxsize_x*xform_boxsize_y
         return xform_boxsize
     
+    def transform_centers(self, scale_x, scale_y):
+        for i in self.centers: #Transform centers
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+                
+    def inv_transform_centers(self, scale_x, scale_y):
+        for i in self.centers: #Transform centers back
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
+    
     def train_xform(self, scale_x, scale_y, area_frac, kick, cycles=np.inf, noise=0):
         """
         Repeatedly transforms system by given amount in given direction, tags particles, transforms back
