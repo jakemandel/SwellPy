@@ -10,25 +10,27 @@ from monodisperse_box_xform import Monodisperse2
 import numpy as np
 import matplotlib.pyplot as plt
 
-# initialize the parameters in the class of methods (N,B,seed)
-# The code in the monodisperse module lays out how each method works
-N = 1000 #number of particles
+N = 1000 
 Bx = 40 #box length (x)
 By = 40 #box length (y)
-seed = 115 #inital particle placement randomization
+seed = 125 
 m = Monodisperse2(N,Bx,By,seed)
 
-#Define: important variables that you need. Natasha goes over these in her paper.
-area_frac = 0.11 # area fraction
+
+area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
-cycle_number = 300 #This is the number of swells  you do to your system.
+cycle_number = 1000 
+xform = .7
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
-m.train_xform(1, .6, area_frac, kick, cycle_number, noise=0)
 
-#m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
+print(count)
+count = m.train_xform(1, xform, area_frac, kick, cycle_number, noise=0)
+print(count)
+m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 area_frac_array = np.array(np.linspace(0,1,100))
 
@@ -42,7 +44,7 @@ data_curve_iso = func_curve_iso(area_frac_array, 1, 1)
 mem1 = m.detect_memory_xform(0, 1, .01, 1,1)
 print('Isotropic:',mem1)
 
-scale_x = .6
+scale_x = xform
 scale_y = 1
 for i in m.centers: #Transform centers along readout axis
     i[0] = i[0]*(scale_x/scale_y)
@@ -61,7 +63,7 @@ mem2 = m.detect_memory_xform(0, 1, .01, scale_x,scale_y)
 print('x-axis:', mem2)
     
 scale_x = 1
-scale_y = .6
+scale_y = xform
 for i in m.centers: #Transform centers along readout axis
     i[0] = i[0]*(scale_x/scale_y)
     i[1] = i[1]*(scale_y/scale_x)    

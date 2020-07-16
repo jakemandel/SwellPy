@@ -9,19 +9,16 @@ Created on Thu Jul  2 14:09:24 2020
 from monodisperse_box_xform import Monodisperse2
 import numpy as np
 
-# initialize the parameters in the class of methods (N,B,seed)
-# The code in the monodisperse module lays out how each method works
-N = 1000 #number of particles
-Bx = 40 #box length (x)
-By = 40 #box length (y)
-seed = 115 #inital particle placement randomization
+N = 1000 
+Bx = 40 
+By = 40 
+seed = 115 
 m = Monodisperse2(N,Bx,By,seed)
 
-#Define: important variables that you need. Natasha goes over these in her paper.
-area_frac = 0.5 # area fraction
+area_frac = 0.5 
 kick = .05
 swell = m.equiv_swell(area_frac)
-cycle_number = 300 #This is the number of swells  you do to your system.
+cycle_number = 300 
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
