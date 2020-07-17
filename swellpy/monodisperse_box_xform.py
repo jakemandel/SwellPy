@@ -550,8 +550,6 @@ class Monodisperse2(ParticleSystem2):
         return area_frac[matches]
     
     
-    
-    
     def _tag_count_xform(self, swells, scale_x, scale_y):
         """
         Returns the number of tagged pairs at a specific area fraction
@@ -677,7 +675,76 @@ class Monodisperse2(ParticleSystem2):
         if show == True:
             plt.show()
         plt.close()
-
+    
+    '''
+    def tag_overlay_plot(self, area_frac, scale_x, scale_y, mode='count', show=True):
+        if (mode == 'curve'):
+            plt.ylabel('Curve')
+            funcI = self.tag_curve_xform
+            dataI = funcI(area_frac, 1, 1)
+            for i in self.centers: # scaling for memory readout by x-axis
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+            funcX = self.tag_curve_xform
+            dataX = funcX(area_frac, scale_x, scale_y)
+            for i in self.centers: #Transform centers back and Switches ratios for memory readout by y-axis
+                i[0] = i[0]((scale_y/scale_x)*2)
+                i[1] = i[1]((scale_x/scale_y)*2)
+            funcY = self.tag_curve_xform
+            dataY = funcY(area_frac, scale_x, scale_y)
+            for i in self.centers: # Transform centers back
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+        elif (mode == 'rate'):
+            plt.ylabel('Rate')
+            funcI = self.tag_rate_xform
+            dataI = funcI(area_frac, 1, 1)
+            for i in self.centers: # scaling for memory readout by x-axis
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+            funcX = self.tag_rate_xform
+            dataX = funcX(area_frac, scale_x, scale_y)
+            for i in self.centers: #Transform centers back
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
+            for i in self.centers: # Switches ratios for memory readout by y-axis
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
+            funcY = self.tag_rate_xform
+            dataY = funcY(area_frac, scale_x, scale_y)
+            for i in self.centers: # Transform centers back
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+        else:
+            plt.ylabel('Count')
+            funcI = self.tag_count_xform
+            dataI = funcI(area_frac, 1, 1)
+            for i in self.centers: # scaling for memory readout by x-axis
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+            funcX = self.tag_count_xform
+            dataX = funcX(area_frac, scale_x, scale_y)
+            for i in self.centers: #Transform centers back
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
+            for i in self.centers: # Switches ratios for memory readout by y-axis
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
+            funcY = self.tag_count_xform
+            dataY = funcY(area_frac, scale_x, scale_y)
+            for i in self.centers: # Transform centers back
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+        plt.plot(area_frac, dataI)
+        plt.plot(area_frac, dataX)
+        plt.plot(area_frac, dataY)
+        plt.xlabel('Area Fraction')
+        plt.legend(['Isotropic memory', 'X-axis memory', 'Y-axis memory'])
+        if show == True:
+            plt.show()
+        plt.close()
+        '''        
+        
     def detect_memory_xform(self, start, end, incr, scale_x = 1,scale_y = 1):
         """
         Tests the number of tagged particles over a range of area fractions, and 
