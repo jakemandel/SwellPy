@@ -17,11 +17,11 @@ seed = 125
 m = Monodisperse2(N,Bx,By,seed)
 
 
-area_frac = 0.5
+area_frac = 0.6
 kick = .05
 #swell = m.equiv_swell(area_frac)
 cycle_number = 1000 
-xform = .95
+xform = .9
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -40,7 +40,7 @@ data_count_iso = func_count_iso(area_frac_array, 1, 1)
 data_rate_iso = func_rate_iso(area_frac_array, 1, 1)
 data_curve_iso = func_curve_iso(area_frac_array, 1, 1)
 
-mem1 = m.detect_memory_xform(0, 1, .01, 1,1)
+mem1 = m.detect_memory_xform(0, 1, .005, 1,1)
 print('Isotropic:',mem1)
 
 scale_x = xform
@@ -58,7 +58,7 @@ for i in m.centers: #Transform centers back
     i[0] = i[0]*(scale_y/scale_x)
     i[1] = i[1]*(scale_x/scale_y)
     
-mem2 = m.detect_memory_xform(0, 1, .01, scale_x,scale_y)
+mem2 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('x-axis:', mem2)
     
 scale_x = 1
@@ -76,7 +76,7 @@ for i in m.centers: #Transform centers back
     i[0] = i[0]*(scale_y/scale_x)
     i[1] = i[1]*(scale_x/scale_y)
 
-mem3 = m.detect_memory_xform(0, 1, .01, scale_x,scale_y)
+mem3 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('y-axis:',mem3)
 
 plt.plot(area_frac_array, data_count_iso)
