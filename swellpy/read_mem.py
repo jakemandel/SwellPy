@@ -17,19 +17,18 @@ seed = 125
 m = Monodisperse2(N,Bx,By,seed)
 
 
-area_frac_x = 0.5
-area_frac_y = 0.5
+area_frac = 0.5
 kick = .05
 #swell = m.equiv_swell(area_frac)
 cycle_number = 1000 
-xform = .97
+xform = .95
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 
-count = m.train_xform(xform, 1, area_frac_x, kick, cycle_number, noise=0)
+count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
 print(count)
-m.particle_plot(area_frac_x, show=True, extend = True, figsize = (7,7), filename=None)
+m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 
 area_frac_array = np.array(np.linspace(0,1,150))
@@ -102,79 +101,6 @@ plt.xlabel('Area Fraction')
 plt.legend(['Isotropic', 'X-axis', 'Y-axis'])
 plt.show()
 
-# Transform y axis
-count = m.train_xform(1, xform, area_frac_y, kick, cycle_number, noise=0)
-print(count)
-m.particle_plot(area_frac_y, show=True, extend = True, figsize = (7,7), filename=None)
-area_frac_array = np.array(np.linspace(0,1,150))
-
-func_count_iso = m.tag_count_xform
-func_rate_iso = m.tag_rate_xform
-func_curve_iso = m.tag_curve_xform
-data_count_iso = func_count_iso(area_frac_array, 1, 1)
-data_rate_iso = func_rate_iso(area_frac_array, 1, 1)
-data_curve_iso = func_curve_iso(area_frac_array, 1, 1)
-
-mem1 = m.detect_memory_xform(0, 1, .01, 1,1)
-print('Isotropic:',mem1)
-
-scale_x = xform
-scale_y = 1
-for i in m.centers: #Transform centers along readout axis
-    i[0] = i[0]*(scale_x/scale_y)
-    i[1] = i[1]*(scale_y/scale_x)
-func_count_x = m.tag_count_xform 
-func_rate_x = m.tag_rate_xform
-func_curve_x = m.tag_curve_xform
-data_count_x = func_count_x(area_frac_array, scale_x, scale_y)
-data_rate_x = func_rate_x(area_frac_array, scale_x, scale_y)
-data_curve_x = func_curve_x(area_frac_array, scale_x, scale_y)
-for i in m.centers: #Transform centers back
-    i[0] = i[0]*(scale_y/scale_x)
-    i[1] = i[1]*(scale_x/scale_y)
-    
-mem2 = m.detect_memory_xform(0, 1, .01, scale_x,scale_y)
-print('x-axis:', mem2)
-    
-scale_x = 1
-scale_y = xform
-for i in m.centers: #Transform centers along readout axis
-    i[0] = i[0]*(scale_x/scale_y)
-    i[1] = i[1]*(scale_y/scale_x)    
-func_count_y = m.tag_count_xform
-func_rate_y = m.tag_rate_xform
-func_curve_y = m.tag_curve_xform
-data_count_y = func_count_y(area_frac_array, scale_x, scale_y)
-data_rate_y = func_rate_y(area_frac_array, scale_x, scale_y)
-data_curve_y = func_curve_y(area_frac_array, scale_x, scale_y)
-for i in m.centers: #Transform centers back
-    i[0] = i[0]*(scale_y/scale_x)
-    i[1] = i[1]*(scale_x/scale_y)
-
-mem3 = m.detect_memory_xform(0, 1, .01, scale_x,scale_y)
-print('y-axis:',mem3)
-
-plt.plot(area_frac_array, data_count_iso)
-plt.plot(area_frac_array, data_count_x)
-plt.plot(area_frac_array, data_count_y)
-plt.ylabel('Count')
-plt.xlabel('Area Fraction')
-plt.legend(['Isotropic', 'X-axis', 'Y-axis'])
-plt.show()
-plt.plot(area_frac_array, data_rate_iso)
-plt.plot(area_frac_array, data_rate_x)
-plt.plot(area_frac_array, data_rate_y)
-plt.ylabel('Rate')
-plt.xlabel('Area Fraction')
-plt.legend(['Isotropic', 'X-axis', 'Y-axis'])
-plt.show()
-plt.plot(area_frac_array, data_curve_iso)
-plt.plot(area_frac_array, data_curve_x)
-plt.plot(area_frac_array, data_curve_y)
-plt.ylabel('Curve')
-plt.xlabel('Area Fraction')
-plt.legend(['Isotropic', 'X-axis', 'Y-axis'])
-plt.show()
 
 #%%
 
