@@ -17,18 +17,17 @@ seed = 125
 m = Monodisperse2(N,Bx,By,seed)
 
 
-area_frac_x = 0.7
-
+area_frac_x = 0.5
 kick = .05
 #swell = m.equiv_swell(area_frac)
-cycle_number_x = 80
-xform = .95
+cycle_number_x = 5000
+xform = .7
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 
 count = m.train_xform(xform, 1, area_frac_x, kick, cycle_number_x, noise=0)
-print(count)
+print('Cycles:',count)
 m.particle_plot(area_frac_x, show=True, extend = True, figsize = (7,7), filename=None)
 
 
@@ -104,11 +103,11 @@ plt.show()
 
 
 # Transform y axis
-area_frac_y = 0.5
-cycle_number_y = 2000
+area_frac_y = 0.3
+cycle_number_y = 5000
 
 count = m.train_xform(1, xform, area_frac_y, kick, cycle_number_y, noise=0)
-print(count)
+print('Cycles:',count)
 m.particle_plot(area_frac_y, show=True, extend = True, figsize = (7,7), filename=None)
 area_frac_array = np.array(np.linspace(0,1,100))
 

@@ -232,6 +232,49 @@ class Monodisperse2(ParticleSystem2):
             count += 1
         return count
     
+    def alternate_train(self, scale_x, scale_y, area_frac_x, area_frac_y, kick, cycles=np.inf, noise=0):
+        """
+        Repeatedly transforms system by given amount in given direction, tags particles, transforms back
+        to original scale and repels the tagged particles when system what transformed. For some number of cycles
+        
+        Will take area_frac_x first then area_frac_y, then continues to alternate.
+        
+        Args:
+            scale_x: scale system in x-direction
+            scale_y: scale system in y-direction
+            area_frac (float): the area fraction to train on
+            kick (float): the maximum distance particles are repelled
+            cycles (int): The upper bound on the number of cycles. Defaults to infinite.
+        Returns:
+            (int) the number of tagging and repelling cycles until no particles overlapped
+        """
+        count = 0
+        swell_x = self.equiv_swell(area_frac_x)
+        swell_y = self.equiv_swell(area_frac_y)
+        xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
+        xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
+        pairs = self._tag(swell_x)
+        while (cycles > count and (len(pairs) > 0) ):
+            for i in self.centers: #Transform centers
+                i[0] = i[0]*(scale_x/scale_y)
+                i[1] = i[1]*(scale_y/scale_x)
+            if (count % 2) == 0:
+                pairs = self._tag_xform(swell_x, xform_boxsize_x, xform_boxsize_y) #Tag with box xformed also
+                swell = swell_x    # sets swell for _repel function
+            else:
+                pairs = self._tag_xform(swell_y, xform_boxsize_x, xform_boxsize_y)
+                swell = swell_y
+            for i in self.centers: #Transform centers back
+                i[0] = i[0]*(scale_y/scale_x)
+                i[1] = i[1]*(scale_x/scale_y)
+            if len(pairs) == 0:
+                continue    
+            self._repel(pairs, swell, kick)
+            self.pos_noise(noise)
+            self.wrap()
+            count += 1
+        return count
+    
     # def train_xform2(self, axis = ‘x’, ratio):
     #     count = 0
     #     swell = self.equiv_swell(area_frac)
