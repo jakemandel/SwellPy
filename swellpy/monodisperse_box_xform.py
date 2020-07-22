@@ -238,6 +238,7 @@ class Monodisperse2(ParticleSystem2):
         to original scale and repels the tagged particles when system what transformed. For some number of cycles
         
         Will take area_frac_x first then area_frac_y, then continues to alternate.
+        Will only scale ONE AXIS AT A TIME
         
         Args:
             scale_x: scale system in x-direction
@@ -251,28 +252,43 @@ class Monodisperse2(ParticleSystem2):
         count = 0
         swell_x = self.equiv_swell(area_frac_x)
         swell_y = self.equiv_swell(area_frac_y)
-        xform_boxsize_x = (self.boxsize_x*scale_x/scale_y)
-        xform_boxsize_y = (self.boxsize_y*scale_y/scale_x)
+        xform_boxsize_x_x = (self.boxsize_x*scale_x)   #xform boxsize for area_frac_x transform (Assumes y transform is 1)
+        xform_boxsize_y_x = (self.boxsize_y/scale_x)   #xform boxsize for area_frac_x transform
+        xform_boxsize_x_y = (self.boxsize_x/scale_y)   #xform boxsize for area_frac_y transform (Assumes x transform is 1)
+        xform_boxsize_y_y = (self.boxsize_y*scale_y)   #xform boxsize for area_frac_y transform
         pairs = self._tag(swell_x)
         while (cycles > count and (len(pairs) > 0) ):
-            for i in self.centers: #Transform centers
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            
             if (count % 2) == 0:
-                pairs = self._tag_xform(swell_x, xform_boxsize_x, xform_boxsize_y) #Tag with box xformed also
-                swell = swell_x    # sets swell for _repel function
-            else:
-                pairs = self._tag_xform(swell_y, xform_boxsize_x, xform_boxsize_y)
-                swell = swell_y
-            for i in self.centers: #Transform centers back
-                i[0] = i[0]*(scale_y/scale_x)
-                i[1] = i[1]*(scale_x/scale_y)
-            if len(pairs) == 0:
-                continue    
-            self._repel(pairs, swell, kick)
-            self.pos_noise(noise)
-            self.wrap()
-            count += 1
+                for i in self.centers: #Transform centers
+                    i[0] = i[0]*(scale_x)
+                    i[1] = i[1]/scale_x
+                pairs = self._tag_xform(swell_x, xform_boxsize_x_x, xform_boxsize_y_x) #Tag with box xformed also
+                for i in self.centers: #Transform centers back
+                    i[0] = i[0]/scale_x
+                    i[1] = i[1]*(scale_x)    
+                if len(pairs) == 0:
+                    continue    
+                self._repel(pairs, swell_x, kick)
+                self.pos_noise(noise)
+                self.wrap()
+                count += 1   
+                
+            else: #area_frac_y transform
+                for i in self.centers: #Transform centers
+                    i[0] = i[0]/scale_y
+                    i[1] = i[1]*(scale_y)
+                pairs = self._tag_xform(swell_y, xform_boxsize_x_y, xform_boxsize_y_y)
+                for i in self.centers: #Transform centers back
+                    i[0] = i[0]*(scale_y)
+                    i[1] = i[1]/scale_y    
+                if len(pairs) == 0:
+                    continue    
+                self._repel(pairs, swell_y, kick)
+                self.pos_noise(noise)
+                self.wrap()
+                count += 1
+                
         return count
     
     # def train_xform2(self, axis = ‘x’, ratio):
