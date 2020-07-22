@@ -258,7 +258,6 @@ class Monodisperse2(ParticleSystem2):
         xform_boxsize_y_y = (self.boxsize_y*scale_y)   #xform boxsize for area_frac_y transform
         pairs = self._tag(swell_x)
         while (cycles > count and (len(pairs) > 0) ):
-            
             if (count % 2) == 0:
                 for i in self.centers: #Transform centers
                     i[0] = i[0]*(scale_x)
