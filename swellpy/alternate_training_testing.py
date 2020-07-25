@@ -18,11 +18,11 @@ m = Monodisperse2(N,Bx,By,seed)
 
 
 area_frac_x = 0.5
-area_frac_y = 0.5
+area_frac_y = 0.3
 kick = .05
 #swell = m.equiv_swell(area_frac)
 cycle_number_x = 15000
-xform = .95
+xform = .85
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
