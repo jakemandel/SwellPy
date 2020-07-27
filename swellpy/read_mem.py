@@ -133,8 +133,8 @@ kick = .05
 cycle_number = 1000 
 xform = .9
 
-count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
-print(count)
+count = m.train_xform(xform, 1/xform, area_frac, kick, cycle_number, noise=0)
+print('Cycles:',count)
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 m.tag_overlay_plot2(area_frac_array, xform, mode='count', show=True)
