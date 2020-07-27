@@ -24,11 +24,11 @@ cycle_number = 15000
 xform = .9
 
 # Read along y axis(wrote along x)
-for a in area_frac:
-    m.train_xform(xform, 1, a, kick, cycle_number, noise=0)
-    print('af=',a)
-    mem = m.detect_memory_xform(0, 1, .001, 1, 1)
-    print(mem)
+# for a in area_frac:
+#     m.train_xform(xform, 1, a, kick, cycle_number, noise=0)
+#     print('af=',a)
+#     mem = m.detect_memory_xform(0, 1, .001, 1, 1)
+#     print(mem)
 
 
 
