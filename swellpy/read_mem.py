@@ -43,7 +43,7 @@ mem1 = m.detect_memory_xform(0, 1, .005, 1,1)
 print('Isotropic:',mem1)
 
 scale_x = xform
-scale_y = 1
+scale_y = 1/xform
 for i in m.centers: #Transform centers along readout axis
     i[0] = i[0]*(scale_x/scale_y)
     i[1] = i[1]*(scale_y/scale_x)
@@ -60,7 +60,7 @@ for i in m.centers: #Transform centers back
 mem2 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('x-axis:', mem2)
     
-scale_x = 1
+scale_x = 1/xform
 scale_y = xform
 for i in m.centers: #Transform centers along readout axis
     i[0] = i[0]*(scale_x/scale_y)
@@ -117,7 +117,7 @@ plt.legend(['Isotropic', 'X-axis', 'Y-axis'])
 plt.show()
 
 #%% Test function
-'''
+
 from monodisperse_box_xform import Monodisperse2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -128,19 +128,15 @@ seed = 125
 m = Monodisperse2(N,Bx,By,seed)
 
 
-area_frac_x = 0.5
-area_frac_y = 0.5
+area_frac = 0.5
 kick = .05
-#swell = m.equiv_swell(area_frac)
 cycle_number = 1000 
-xform = .8
-area_frac = .5
+xform = .9
 
-count = m.train_xform(xform, 1, area_frac_x, kick, cycle_number, noise=0)
+count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
 print(count)
-m.particle_plot(area_frac_x, show=True, extend = True, figsize = (7,7), filename=None)
+m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
-m.tag_overlay_plot(area_frac_array, 1, 1, mode='count', show=True)
-m.tag_overlay_plot(area_frac_array, 0.8, 1, mode='count', show=True)
-m.tag_overlay_plot(area_frac_array, 1, .8, mode='count', show=True)
-'''
+m.tag_overlay_plot2(area_frac_array, xform, mode='count', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, mode='rate', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, mode='curve', show=True)

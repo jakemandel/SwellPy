@@ -22,13 +22,16 @@ kick = .03
 #swell = m.equiv_swell(area_frac)
 cycle_number = 15000
 xform = .9
+area_frac_array = np.array(np.linspace(0,1,100))
 
-# Read along y axis(wrote along x)
-# for a in area_frac:
-#     m.train_xform(xform, 1, a, kick, cycle_number, noise=0)
-#     print('af=',a)
-#     mem = m.detect_memory_xform(0, 1, .001, 1, 1)
-#     print(mem)
+#Read along y axis(wrote along x)
+for a in area_frac:
+    m = Monodisperse2(N,Bx,By,seed)
+    m.train_xform(xform, 1/xform, a, kick, cycle_number, noise=0)
+    #m.tag_overlay_plot2(area_frac_array, xform, mode='rate', show=True)
+    print('af=',a)
+    mem = m.detect_memory_xform(0, 1, .003, 1/xform, xform)
+    print(mem)
 
 
 
@@ -188,7 +191,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #xform = 0.9
-#Theory, Y-Axis Reading
+#Theory, Isotropic Reading
 area_frac = [.2,.3,.4,.5,.6,.7,.8]
 af_i2 = [0.162, 0.243, 0.324, 0.405, 0.486, 0.567, 0.648]
 
@@ -211,6 +214,42 @@ plt.plot(area_frac,af_kick4)
 plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Isotropic Read-Out')
+plt.legend(['Transform=0.9 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+#plt.xlim([.3,.7])
+plt.show()
+
+#%% 2nd test
+from monodisperse_box_xform import Monodisperse2
+import numpy as np
+import matplotlib.pyplot as plt
+
+#xform = 0.9
+#Theory, Y-Axis Reading
+area_frac = [.2,.3,.4,.5,.6,.7,.8]
+af_y2 = [0.13122, 0.19683, 0.26244, 0.32805, 0.39366, 0.45927, 0.52488]
+
+#Data (kick1 = 0.1)
+af_kick1 = [.114,.18,.192,.231,.27,.336,.36]
+#Data (kick2 = 0.075)
+af_kick2 = [.111,.176,.22,.34,.39,.354,.372]
+#Data (kick3 = 0.05)
+af_kick3 = [.13,.18,.194,.222,.298,.313,.371]
+#Data (kick4 = 0.03)
+af_kick4 = [.093,.135,.219,.216,.27,.345,.432]
+
+
+
+
+plt.plot(area_frac, af_y2,'-.')
+
+plt.plot(area_frac,af_kick1)
+plt.plot(area_frac,af_kick2)
+plt.plot(area_frac, af_kick3)
+plt.plot(area_frac,af_kick4)
+
+plt.xlabel('Memory Written (area fraction)')
+plt.ylabel('Phantom Memory (area fraction)')
+plt.title('Y-Axis Read-Out')
 plt.legend(['Transform=0.9 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
 #plt.xlim([.3,.7])
 plt.show()

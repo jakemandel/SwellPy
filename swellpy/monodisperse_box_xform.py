@@ -734,65 +734,64 @@ class Monodisperse2(ParticleSystem2):
             plt.show()
         plt.close()
     
-    '''
-    def tag_overlay_plot(self, area_frac, scale_x, scale_y, mode='count', show=True):
+    def tag_overlay_plot2(self, area_frac, xform, mode='count', show=True, filename=None):
+        '''
+        area_frac is area fraction array
+        
+        Parameters
+        ----------
+        area_frac : TYPE
+            DESCRIPTION.
+        xform : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        '''
         if (mode == 'curve'):
             plt.ylabel('Curve')
             funcI = self.tag_curve_xform
             dataI = funcI(area_frac, 1, 1)
-            for i in self.centers: # scaling for memory readout by x-axis
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            #Transform for x-axis readout
+            self.transform_centers(xform, 1/xform)
             funcX = self.tag_curve_xform
-            dataX = funcX(area_frac, scale_x, scale_y)
-            for i in self.centers: #Transform centers back and Switches ratios for memory readout by y-axis
-                i[0] = i[0]((scale_y/scale_x)*2)
-                i[1] = i[1]((scale_x/scale_y)*2)
+            dataX = funcX(area_frac, xform, 1/xform)
+            self.inv_transform_centers(xform, 1/xform) #transform centers back
+            #Transform for y-axis readout
+            self.transform_centers(1/xform, xform)
             funcY = self.tag_curve_xform
-            dataY = funcY(area_frac, scale_x, scale_y)
-            for i in self.centers: # Transform centers back
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            dataY = funcY(area_frac, 1/xform, xform)
+            self.inv_transform_centers(1/xform, xform) #transform centers back
         elif (mode == 'rate'):
             plt.ylabel('Rate')
             funcI = self.tag_rate_xform
             dataI = funcI(area_frac, 1, 1)
-            for i in self.centers: # scaling for memory readout by x-axis
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            #Transform for x-axis readout
+            self.transform_centers(xform, 1/xform)
             funcX = self.tag_rate_xform
-            dataX = funcX(area_frac, scale_x, scale_y)
-            for i in self.centers: #Transform centers back
-                i[0] = i[0]*(scale_y/scale_x)
-                i[1] = i[1]*(scale_x/scale_y)
-            for i in self.centers: # Switches ratios for memory readout by y-axis
-                i[0] = i[0]*(scale_y/scale_x)
-                i[1] = i[1]*(scale_x/scale_y)
+            dataX = funcX(area_frac, xform, 1/xform)
+            self.inv_transform_centers(xform, 1/xform) #transform centers back
+            #Transform for y-axis readout
+            self.transform_centers(1/xform, xform)
             funcY = self.tag_rate_xform
-            dataY = funcY(area_frac, scale_x, scale_y)
-            for i in self.centers: # Transform centers back
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            dataY = funcY(area_frac, 1/xform, xform)
+            self.inv_transform_centers(1/xform, xform) #transform centers back
         else:
             plt.ylabel('Count')
             funcI = self.tag_count_xform
             dataI = funcI(area_frac, 1, 1)
-            for i in self.centers: # scaling for memory readout by x-axis
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            #Transform for x-axis readout
+            self.transform_centers(xform, 1/xform)
             funcX = self.tag_count_xform
-            dataX = funcX(area_frac, scale_x, scale_y)
-            for i in self.centers: #Transform centers back
-                i[0] = i[0]*(scale_y/scale_x)
-                i[1] = i[1]*(scale_x/scale_y)
-            for i in self.centers: # Switches ratios for memory readout by y-axis
-                i[0] = i[0]*(scale_y/scale_x)
-                i[1] = i[1]*(scale_x/scale_y)
+            dataX = funcX(area_frac, xform, 1/xform)
+            self.inv_transform_centers(xform, 1/xform) #transform centers back
+            #Transform for y-axis readout
+            self.transform_centers(1/xform, xform)
             funcY = self.tag_count_xform
-            dataY = funcY(area_frac, scale_x, scale_y)
-            for i in self.centers: # Transform centers back
-                i[0] = i[0]*(scale_x/scale_y)
-                i[1] = i[1]*(scale_y/scale_x)
+            dataY = funcY(area_frac, 1/xform, xform)
+            self.inv_transform_centers(1/xform, xform) #transform centers back
         plt.plot(area_frac, dataI)
         plt.plot(area_frac, dataX)
         plt.plot(area_frac, dataY)
@@ -801,7 +800,77 @@ class Monodisperse2(ParticleSystem2):
         if show == True:
             plt.show()
         plt.close()
-        '''        
+            
+            
+
+
+    # def tag_overlay_plot(self, area_frac, scale_x, scale_y, mode='count', show=True):
+    #     if (mode == 'curve'):
+    #         plt.ylabel('Curve')
+    #         funcI = self.tag_curve_xform
+    #         dataI = funcI(area_frac, 1, 1)
+    #         for i in self.centers: # scaling for memory readout by x-axis
+    #             i[0] = i[0]*(scale_x/scale_y)
+    #             i[1] = i[1]*(scale_y/scale_x)
+    #         funcX = self.tag_curve_xform
+    #         dataX = funcX(area_frac, scale_x, scale_y)
+    #         for i in self.centers: #Transform centers back and Switches ratios for memory readout by y-axis
+    #             i[0] = i[0]((scale_y/scale_x)*2)
+    #             i[1] = i[1]((scale_x/scale_y)*2)
+    #         funcY = self.tag_curve_xform
+    #         dataY = funcY(area_frac, scale_x, scale_y)
+    #         for i in self.centers: # Transform centers back
+    #             i[0] = i[0]*(scale_x/scale_y)
+    #             i[1] = i[1]*(scale_y/scale_x)
+    #     elif (mode == 'rate'):
+    #         plt.ylabel('Rate')
+    #         funcI = self.tag_rate_xform
+    #         dataI = funcI(area_frac, 1, 1)
+    #         for i in self.centers: # scaling for memory readout by x-axis
+    #             i[0] = i[0]*(scale_x/scale_y)
+    #             i[1] = i[1]*(scale_y/scale_x)
+    #         funcX = self.tag_rate_xform
+    #         dataX = funcX(area_frac, scale_x, scale_y)
+    #         for i in self.centers: #Transform centers back
+    #             i[0] = i[0]*(scale_y/scale_x)
+    #             i[1] = i[1]*(scale_x/scale_y)
+    #         for i in self.centers: # Switches ratios for memory readout by y-axis
+    #             i[0] = i[0]*(scale_y/scale_x)
+    #             i[1] = i[1]*(scale_x/scale_y)
+    #         funcY = self.tag_rate_xform
+    #         dataY = funcY(area_frac, scale_x, scale_y)
+    #         for i in self.centers: # Transform centers back
+    #             i[0] = i[0]*(scale_x/scale_y)
+    #             i[1] = i[1]*(scale_y/scale_x)
+    #     else:
+    #         plt.ylabel('Count')
+    #         funcI = self.tag_count_xform
+    #         dataI = funcI(area_frac, 1, 1)
+    #         for i in self.centers: # scaling for memory readout by x-axis
+    #             i[0] = i[0]*(scale_x/scale_y)
+    #             i[1] = i[1]*(scale_y/scale_x)
+    #         funcX = self.tag_count_xform
+    #         dataX = funcX(area_frac, scale_x, scale_y)
+    #         for i in self.centers: #Transform centers back
+    #             i[0] = i[0]*(scale_y/scale_x)
+    #             i[1] = i[1]*(scale_x/scale_y)
+    #         for i in self.centers: # Switches ratios for memory readout by y-axis
+    #             i[0] = i[0]*(scale_y/scale_x)
+    #             i[1] = i[1]*(scale_x/scale_y)
+    #         funcY = self.tag_count_xform
+    #         dataY = funcY(area_frac, scale_x, scale_y)
+    #         for i in self.centers: # Transform centers back
+    #             i[0] = i[0]*(scale_x/scale_y)
+    #             i[1] = i[1]*(scale_y/scale_x)
+    #     plt.plot(area_frac, dataI)
+    #     plt.plot(area_frac, dataX)
+    #     plt.plot(area_frac, dataY)
+    #     plt.xlabel('Area Fraction')
+    #     plt.legend(['Isotropic memory', 'X-axis memory', 'Y-axis memory'])
+    #     if show == True:
+    #         plt.show()
+    #     plt.close()
+           
         
 
     
@@ -860,12 +929,12 @@ class Monodisperse2(ParticleSystem2):
         if axis == 'Isotropic':
             written_memory = (B/scale)*np.sqrt(memory/(N*np.pi))
         #if iso fails check x or y
-        elif axis == 'X':
+        elif axis == 'x':
             written_memory = (B/scale**2)*np.sqrt(memory/(N*np.pi))
-        elif axis == 'Y':
-            written_memory = (B/scale**2)*np.sqrt(memory/(N*np.pi))
+        elif axis == 'y':
+            written_memory = (B/(scale**4))*np.sqrt(memory/(N*np.pi))
         else:
             written_memory = 0
             print('ERROR: AXIS NOT FOUND')
-        return print('Written Memory:','\n', axis,'\n', 'Area Fraction:', written_memory)
+        return print('Written Memory:','\n','Axis:', axis,'\n', 'Area Fraction:', written_memory)
         
