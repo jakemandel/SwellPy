@@ -803,6 +803,8 @@ class Monodisperse2(ParticleSystem2):
         plt.close()
         '''        
         
+
+    
     def detect_memory_xform(self, start, end, incr, scale_x = 1,scale_y = 1):
         """
         Tests the number of tagged particles over a range of area fractions, and 
@@ -839,3 +841,31 @@ class Monodisperse2(ParticleSystem2):
                 i[0] = i[0]*(scale_y/scale_x)
                 i[1] = i[1]*(scale_x/scale_y)
         return area_frac[matches]
+    
+    # def find_axis(self,theta):
+        
+    #         axis = 'Isotropic'
+    #         axis = 'X'
+    #         axis = 'Y'
+    #     return axis
+    
+    def find_written_memory(self, N, B, axis, memory, scale, kick=0):
+        '''
+        Can replace input memory for output of detect memory function
+            -Need to add how to account for kick error
+        '''
+        #check isotropic reading
+        # 1) kicks
+        # 2) map back
+        if axis == 'Isotropic':
+            written_memory = (B/scale)*np.sqrt(memory/(N*np.pi))
+        #if iso fails check x or y
+        elif axis == 'X':
+            written_memory = (B/scale**2)*np.sqrt(memory/(N*np.pi))
+        elif axis == 'Y':
+            written_memory = (B/scale**2)*np.sqrt(memory/(N*np.pi))
+        else:
+            written_memory = 0
+            print('ERROR: AXIS NOT FOUND')
+        return print('Written Memory:','\n', axis,'\n', 'Area Fraction:', written_memory)
+        
