@@ -734,7 +734,7 @@ class Monodisperse2(ParticleSystem2):
             plt.show()
         plt.close()
     
-    def tag_overlay_plot2(self, area_frac, xform, mode='count', show=True, filename=None):
+    def tag_overlay_plot2(self, area_frac, scale_x, scale_y, mode='count', show=True, filename=None):
         '''
         area_frac is area fraction array
         
@@ -755,43 +755,43 @@ class Monodisperse2(ParticleSystem2):
             funcI = self.tag_curve_xform
             dataI = funcI(area_frac, 1, 1)
             #Transform for x-axis readout
-            self.transform_centers(xform, 1/xform)
+            self.transform_centers(scale_x, scale_y)
             funcX = self.tag_curve_xform
-            dataX = funcX(area_frac, xform, 1/xform)
-            self.inv_transform_centers(xform, 1/xform) #transform centers back
+            dataX = funcX(area_frac, scale_x, scale_y)
+            self.inv_transform_centers(scale_x, scale_y) #transform centers back
             #Transform for y-axis readout
-            self.transform_centers(1/xform, xform)
+            self.transform_centers(scale_y, scale_x)
             funcY = self.tag_curve_xform
-            dataY = funcY(area_frac, 1/xform, xform)
-            self.inv_transform_centers(1/xform, xform) #transform centers back
+            dataY = funcY(area_frac, scale_y, scale_x)
+            self.inv_transform_centers(scale_y, scale_x) #transform centers back
         elif (mode == 'rate'):
             plt.ylabel('Rate')
             funcI = self.tag_rate_xform
             dataI = funcI(area_frac, 1, 1)
             #Transform for x-axis readout
-            self.transform_centers(xform, 1/xform)
+            self.transform_centers(scale_x, scale_y)
             funcX = self.tag_rate_xform
-            dataX = funcX(area_frac, xform, 1/xform)
-            self.inv_transform_centers(xform, 1/xform) #transform centers back
+            dataX = funcX(area_frac, scale_x, scale_y)
+            self.inv_transform_centers(scale_x, scale_y) #transform centers back
             #Transform for y-axis readout
-            self.transform_centers(1/xform, xform)
+            self.transform_centers(scale_y, scale_x)
             funcY = self.tag_rate_xform
-            dataY = funcY(area_frac, 1/xform, xform)
-            self.inv_transform_centers(1/xform, xform) #transform centers back
+            dataY = funcY(area_frac, scale_y, scale_x)
+            self.inv_transform_centers(scale_y, scale_x) #transform centers back
         else:
             plt.ylabel('Count')
             funcI = self.tag_count_xform
             dataI = funcI(area_frac, 1, 1)
             #Transform for x-axis readout
-            self.transform_centers(xform, 1/xform)
+            self.transform_centers(scale_x, scale_y)
             funcX = self.tag_count_xform
-            dataX = funcX(area_frac, xform, 1/xform)
-            self.inv_transform_centers(xform, 1/xform) #transform centers back
+            dataX = funcX(area_frac, scale_x, scale_y)
+            self.inv_transform_centers(scale_x, scale_y) #transform centers back
             #Transform for y-axis readout
-            self.transform_centers(1/xform, xform)
+            self.transform_centers(scale_y, scale_x)
             funcY = self.tag_count_xform
-            dataY = funcY(area_frac, 1/xform, xform)
-            self.inv_transform_centers(1/xform, xform) #transform centers back
+            dataY = funcY(area_frac, scale_y, scale_x)
+            self.inv_transform_centers(scale_y, scale_x) #transform centers back
         plt.plot(area_frac, dataI)
         plt.plot(area_frac, dataX)
         plt.plot(area_frac, dataY)

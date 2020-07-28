@@ -23,22 +23,22 @@ kick = .05
 cycle_number = 10000
 xform = .95
 
-count = m.train_xform(xform, 1/xform, area_frac, kick, cycle_number, noise=0)
-print('Cycles:',count)
+count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
+print('Cycles:', count)
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 
 area_frac_array = np.array(np.linspace(0,1,100))
 
-m.tag_overlay_plot2(area_frac_array, xform, mode='count', show=True)
-m.tag_overlay_plot2(area_frac_array, xform, mode='rate', show=True)
-m.tag_overlay_plot2(area_frac_array, xform, mode='curve', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, 1, mode='count', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, 1, mode='curve', show=True)
 
 mem1 = m.detect_memory_xform(0, 1, .005, 1,1)
 print('Isotropic:', mem1)
-mem2 = m.detect_memory_xform(0, 1, .005, xform, 1/xform)
+mem2 = m.detect_memory_xform(0, 1, .005, xform, 1)
 print('x-axis:', mem2)
-mem3 = m.detect_memory_xform(0, 1, .005, 1/xform, xform)
+mem3 = m.detect_memory_xform(0, 1, .005, 1, xform)
 print('y-axis:', mem3)
 
 #%%
