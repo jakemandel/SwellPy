@@ -742,8 +742,10 @@ class Monodisperse2(ParticleSystem2):
         ----------
         area_frac : TYPE
             DESCRIPTION.
-        xform : TYPE
-            DESCRIPTION.
+        scale_x : TYPE
+            Scaling factor on x-axis
+        scale_y : TYPE
+            Scaling factor on y-axis
 
         Returns
         -------
@@ -912,7 +914,9 @@ class Monodisperse2(ParticleSystem2):
         return area_frac[matches]
     
     # def find_axis(self,theta):
-        
+        '''
+        Returns what axis is being read off of. NOT the axis the memory was written
+        '''
     #         axis = 'Isotropic'
     #         axis = 'X'
     #         axis = 'Y'
@@ -927,12 +931,12 @@ class Monodisperse2(ParticleSystem2):
         # 1) kicks
         # 2) map back
         if axis == 'Isotropic':
-            written_memory = (B/scale)*np.sqrt(memory/(N*np.pi))
+            written_memory = memory/(scale**2)
         #if iso fails check x or y
         elif axis == 'x':
-            written_memory = (B/scale**2)*np.sqrt(memory/(N*np.pi))
+            written_memory = memory/(scale**4)
         elif axis == 'y':
-            written_memory = (B/(scale**4))*np.sqrt(memory/(N*np.pi))
+            written_memory = memory/(scale**4)
         else:
             written_memory = 0
             print('ERROR: AXIS NOT FOUND')

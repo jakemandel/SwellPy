@@ -18,19 +18,19 @@ m = Monodisperse2(N,Bx,By,seed)
 
 
 area_frac = [.2,.3,.4,.5,.6,.7,.8]
-kick = .1
+kick = .03
 #swell = m.equiv_swell(area_frac)
-cycle_number = 15000
-xform = .9
+cycle_number = 30000
+xform = .80
 area_frac_array = np.array(np.linspace(0,1,100))
 
 #Read along y axis(wrote along x)
 for a in area_frac:
     m = Monodisperse2(N,Bx,By,seed)
-    m.train_xform(xform, 1/xform, a, kick, cycle_number, noise=0)
-    m.tag_overlay_plot2(area_frac_array, xform, mode='rate', show=True)
+    m.train_xform(xform, 1, a, kick, cycle_number, noise=0)
+    m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
     print('af=',a)
-    mem = m.detect_memory_xform(0, 1, .005, 1/xform, xform)
+    mem = m.detect_memory_xform(0, 1, .003, 1, xform)
     print(mem)
 
 
@@ -111,17 +111,18 @@ Transform: xform = 0.95
 '''
 #Y-Axis
 area_frac = [.2,.3,.4,.5,.6,.7,.8]
-y1 = [x * .95**8 for x in area_frac]
+y1 = [x * .95**4 for x in area_frac]
 
 # kick1 = 0.1
-y_data1 = [.16,.207,.31,.351,.42,.48,.55]
+y_data1 = [.189,.279,.381,.441,.504,.605,.69]
 # kick = 0.075
-y_data2 = []
+y_data2 = [.171,.255,.345,.432,.531,.615,.675]
 # kick = 0.05
-y_data3 = [.155,.231,.288,.36,.408,.48,.535]
+y_data3 = [.174,.266,.327,.412,.544,.581,.665]
 # kick = 0.03
-y_data4 = [.135,.205,.265,.335,.405,.486,.535]
+y_data4 = [.168,.249,.327,.414,.498,.576,.669]
 
+plt.grid()
 plt.plot(area_frac,y1,'-.')
 plt.plot(area_frac,y_data1)
 plt.plot(area_frac,y_data2)
@@ -134,20 +135,21 @@ plt.legend(['Transform=0.95 Theory','kick = 0.1','kick = 0.075','kick = 0.05','k
 plt.show()
 
 '''
-Transform: xform = 0.9
+Transform: xform = 0.90
 '''
 #Y-Axis
-y2 = [x * .9**8 for x in area_frac]
+y2 = [x * .9**4 for x in area_frac]
 
 # kick1 = 0.1
-y_data1 = [.11,.168,.192,.231,.32,.336,.36]
+y_data1 = [.168,.252,.3,.348,.468,.474,.546]
 # kick = 0.075
-y_data2 = [.186,.225,.285,.348,.405,.5,.535]
+y_data2 = [.155,.2,.291,.335,.44,.494,.483]
 # kick = 0.05
-y_data3 = [.155,.231,.288,.36,.408,.48,.535]
+y_data3 = [.13,.21,.268,.33,.40,.464,.525] 
 # kick = 0.03
-y_data4 = [.135,.205,.265,.335,.405,.486,.535]
+y_data4 = [.136,.2,.264,.33,.396,.462,.528]
 
+plt.grid()
 plt.plot(area_frac,y2,'-.')
 plt.plot(area_frac,y_data1)
 plt.plot(area_frac,y_data2)
@@ -156,8 +158,84 @@ plt.plot(area_frac,y_data4)
 plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Y-Axis Read-Out')
-plt.legend(['Transform=0.95 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.legend(['Transform=0.90 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
 plt.show()
+#Isotropic Reading
+y_i2 = [x * .9**2 for x in area_frac]
+
+# kick1 = 0.1
+af_kick1 = [.168,.276,.366,.468,.525,.613,.669]
+# kick2 = 0.075
+af_kick2 = [.165,.25,.385,.455,.513,.612,.678]
+# kick3 = 0.05
+af_kick3 = [.165,.255,.33,.413,.498,.578,.65]
+# kick4 = 0.03
+af_kick4 = [.168,.275,.332,.433,.491,.576,.651]
+
+plt.grid()
+plt.plot(area_frac, y_i2,'-.')
+plt.plot(area_frac,af_kick1)
+plt.plot(area_frac,af_kick2)
+plt.plot(area_frac, af_kick3)
+plt.plot(area_frac,af_kick4)
+plt.xlabel('Memory Written (area fraction)')
+plt.ylabel('Phantom Memory (area fraction)')
+plt.title('Isotropic Read-Out')
+plt.legend(['Transform=0.90 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.show()
+
+'''
+Transform: xform = 0.80
+'''
+#Y-Axis
+y4 = [x * .8**4 for x in area_frac]
+
+# kick1 = 0.1
+y_data1 = [.171,.165,.225,.237,.247,.306,.378]
+# kick = 0.075
+y_data2 = [.099,.159,.173,.249,.285,.34,.391]
+# kick = 0.05
+y_data3 = [.088,.124,.196,.228,.256,.356,.39] 
+# kick = 0.03
+y_data4 = [.088,.18,.18,.366,.249,.309,.354]
+
+plt.grid()
+plt.plot(area_frac,y4,'-.')
+plt.plot(area_frac,y_data1)
+plt.plot(area_frac,y_data2)
+plt.plot(area_frac,y_data3)
+plt.plot(area_frac,y_data4)
+plt.xlabel('Memory Written (area fraction)')
+plt.ylabel('Phantom Memory (area fraction)')
+plt.title('Y-Axis Read-Out')
+plt.legend(['Transform=0.80 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -281,66 +359,5 @@ from monodisperse_box_xform import Monodisperse2
 import numpy as np
 import matplotlib.pyplot as plt
 
-#xform = 0.9
-#Theory, Isotropic Reading
-area_frac = [.2,.3,.4,.5,.6,.7,.8]
-af_i2 = [0.162, 0.243, 0.324, 0.405, 0.486, 0.567, 0.648]
-
-# kick1 = 0.1
-af_kick1 = [.168,.276,.366,.468,.525,.613,.669]
-# kick2 = 0.075
-af_kick2 = [.165,.25,.385,.455,.513,.612,.678]
-# kick3 = 0.05
-af_kick3 = [.165,.255,.33,.413,.498,.578,.65]
-# kick4 = 0.03
-af_kick4 = [.168,.275,.332,.433,.491,.576,.651]
-
-plt.plot(area_frac, af_i2,'-.')
-
-plt.plot(area_frac,af_kick1)
-plt.plot(area_frac,af_kick2)
-plt.plot(area_frac, af_kick3)
-plt.plot(area_frac,af_kick4)
-
-plt.xlabel('Memory Written (area fraction)')
-plt.ylabel('Phantom Memory (area fraction)')
-plt.title('Isotropic Read-Out')
-plt.legend(['Transform=0.9 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
-#plt.xlim([.3,.7])
-plt.show()
-
-#%% 2nd test for y-readout
-from monodisperse_box_xform import Monodisperse2
-import numpy as np
-import matplotlib.pyplot as plt
-
-#xform = 0.9
-#Theory, Y-Axis Reading
-area_frac = [.2,.3,.4,.5,.6,.7,.8]
-af_y2 = [0.13122, 0.19683, 0.26244, 0.32805, 0.39366, 0.45927, 0.52488]
-
-#Data (kick1 = 0.1)
-af_kick1 = [.114,.18,.192,.231,.27,.336,.36]
-#Data (kick2 = 0.075)
-af_kick2 = [.111,.176,.22,.34,.39,.354,.372]
-#Data (kick3 = 0.05)
-af_kick3 = [.13,.18,.194,.222,.298,.313,.371]
-#Data (kick4 = 0.03)
-af_kick4 = [.093,.135,.219,.216,.27,.345,.432]
 
 
-
-
-plt.plot(area_frac, af_y2,'-.')
-
-plt.plot(area_frac,af_kick1)
-plt.plot(area_frac,af_kick2)
-plt.plot(area_frac, af_kick3)
-plt.plot(area_frac,af_kick4)
-
-plt.xlabel('Memory Written (area fraction)')
-plt.ylabel('Phantom Memory (area fraction)')
-plt.title('Y-Axis Read-Out')
-plt.legend(['Transform=0.9 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
-#plt.xlim([.3,.7])
-plt.show()
