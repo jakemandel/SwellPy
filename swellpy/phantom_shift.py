@@ -13,24 +13,24 @@ import matplotlib.pyplot as plt
 N = 1000 
 Bx = 40 #box length (x)
 By = 40 #box length (y)
-seed = 125 
+seed = 7
 m = Monodisperse2(N,Bx,By,seed)
 
 
 area_frac = [.2,.3,.4,.5,.6,.7,.8]
-kick = .03
+kick = .05
 #swell = m.equiv_swell(area_frac)
 cycle_number = 30000
-xform = .80
+xform = .90
 area_frac_array = np.array(np.linspace(0,1,100))
 
 #Read along y axis(wrote along x)
 for a in area_frac:
     m = Monodisperse2(N,Bx,By,seed)
     m.train_xform(xform, 1, a, kick, cycle_number, noise=0)
-    m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
+    #m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
     print('af=',a)
-    mem = m.detect_memory_xform(0, 1, .003, 1, xform)
+    mem = m.detect_memory_xform(0, 1, .001, 1, xform)
     print(mem)
 
 
@@ -87,6 +87,7 @@ plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Y-Axis Read-Out')
 plt.legend(['X Read-Out','Transform = 0.95','Transform = 0.90','Transform = 0.85','Transform = 0.80'])
+plt.ylim([0,0.85])
 plt.show()
 
 y1 = [x * .95**2 for x in area_frac]
@@ -103,6 +104,7 @@ plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Isotropic Read-Out')
 plt.legend(['X Read-Out','Transform = 0.95','Transform = 0.90','Transform = 0.85','Transform = 0.80'])
+plt.ylim([0,0.85])
 plt.show()
 
 #%% AT SMALL TRANSFORM SIZES
@@ -124,14 +126,15 @@ y_data4 = [.168,.249,.327,.414,.498,.576,.669]
 
 plt.grid()
 plt.plot(area_frac,y1,'-.')
-plt.plot(area_frac,y_data1)
-plt.plot(area_frac,y_data2)
-plt.plot(area_frac,y_data3)
-plt.plot(area_frac,y_data4)
+plt.plot(area_frac,y_data1, '-o')
+plt.plot(area_frac,y_data2, '-o')
+plt.plot(area_frac,y_data3, '-o')
+plt.plot(area_frac,y_data4, '-o')
 plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Y-Axis Read-Out')
 plt.legend(['Transform=0.95 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.ylim([0,0.85])
 plt.show()
 
 '''
@@ -151,15 +154,17 @@ y_data4 = [.136,.2,.264,.33,.396,.462,.528]
 
 plt.grid()
 plt.plot(area_frac,y2,'-.')
-plt.plot(area_frac,y_data1)
-plt.plot(area_frac,y_data2)
-plt.plot(area_frac,y_data3)
-plt.plot(area_frac,y_data4)
+plt.plot(area_frac,y_data1, '-o')
+plt.plot(area_frac,y_data2, '-o')
+plt.plot(area_frac,y_data3, '-o')
+plt.plot(area_frac,y_data4, '-o')
 plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Y-Axis Read-Out')
 plt.legend(['Transform=0.90 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.ylim([0,0.85])
 plt.show()
+
 #Isotropic Reading
 y_i2 = [x * .9**2 for x in area_frac]
 
@@ -174,14 +179,15 @@ af_kick4 = [.168,.275,.332,.433,.491,.576,.651]
 
 plt.grid()
 plt.plot(area_frac, y_i2,'-.')
-plt.plot(area_frac,af_kick1)
-plt.plot(area_frac,af_kick2)
-plt.plot(area_frac, af_kick3)
-plt.plot(area_frac,af_kick4)
+plt.plot(area_frac,af_kick1, '-o')
+plt.plot(area_frac,af_kick2, '-o')
+plt.plot(area_frac, af_kick3, '-o')
+plt.plot(area_frac,af_kick4, '-o')
 plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Isotropic Read-Out')
 plt.legend(['Transform=0.90 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.ylim([0,0.85])
 plt.show()
 
 '''
@@ -201,20 +207,87 @@ y_data4 = [.088,.18,.18,.366,.249,.309,.354]
 
 plt.grid()
 plt.plot(area_frac,y4,'-.')
-plt.plot(area_frac,y_data1)
-plt.plot(area_frac,y_data2)
-plt.plot(area_frac,y_data3)
-plt.plot(area_frac,y_data4)
+plt.plot(area_frac,y_data1, '-o')
+plt.plot(area_frac,y_data2, '-o')
+plt.plot(area_frac,y_data3, '-o')
+plt.plot(area_frac,y_data4, '-o')
 plt.xlabel('Memory Written (area fraction)')
 plt.ylabel('Phantom Memory (area fraction)')
 plt.title('Y-Axis Read-Out')
 plt.legend(['Transform=0.80 Theory','kick = 0.1','kick = 0.075','kick = 0.05','kick = 0.03'])
+plt.ylim([0,0.85])
 plt.show()
 
 
+#%% Error Bar Plot (Concept)
+# Using Y-Axis Read-out
+# Transform = 0.90
+# Kick = 0.05
 
+area_frac = [.2,.3,.4,.5,.6,.7,.8]
+y2 = [x * .9**4 for x in area_frac]
+af_y2 = [0.13122, 0.19683, 0.26244, 0.32805, 0.39366, 0.45927, 0.52488] #theory at xform .9
 
+# seed = 125
+y_data1 = [.13,.21,.268,.33,.40,.464,.525]
+# seed = 1
+y_data2 = [.147,.205,.264,.335,.402,.474,.535] 
+# seed = 2
+y_data3 = [.176,.202,.278,.388,.4,.468,.542]
+# seed = 4
+y_data4 = [.162,.227,.278,.361,.43,.484,.535]
+# seed = 5
+y_data5 = [.141,.202,.27,.337,.399,.462,.543]
+# seed = 6
+y_data6 = [.197,.21,.278,.343,.41,.476,.534]
+# seed = 7
+y_data7 = [.159,.208,.309,.361,.401,.465,.542]
 
+# for i in range(0,7):
+#     avg = (y_data1[i]+y_data2[i]+y_data3[i]+y_data4[i]+y_data5[i]+y_data6[i]+y_data7[i])/7
+#     print(avg)
+    
+avg1 = 0.15885714285714286
+avg2 = 0.20914285714285713
+avg3 = 0.27785714285714286
+avg4 = 0.3507142857142857
+avg5 = 0.40599999999999997
+avg6 = 0.47042857142857136
+avg7 = 0.5365714285714286
+avg = [0.15885714285714286,0.20914285714285713,0.27785714285714286,0.3507142857142857,0.40599999999999997,0.47042857142857136,0.5365714285714286]
+
+std1 = 0.02087670315672179
+std2 = 0.0079359682356178
+std3 = 0.013736589007137845
+std4 = 0.018994091455083642
+std5 = 0.010378549306829228
+std6 = 0.0073262179456903154
+std7 = 0.00592469752952221
+std = [0.02087670315672179,0.0079359682356178,0.013736589007137845,0.018994091455083642,0.010378549306829228,0.0073262179456903154,0.00592469752952221]
+
+# for i in range(0,7):
+#     new_list = []
+#     new_list.append(y_data1[i])
+#     new_list.append(y_data2[i])
+#     new_list.append(y_data3[i])
+#     new_list.append(y_data4[i])
+#     new_list.append(y_data5[i])
+#     new_list.append(y_data6[i])
+#     new_list.append(y_data7[i])
+#     std = np.std(new_list)
+#     print(std)
+    
+y_data_err = [.04478,.03017,.01556,.05995,.03634,.02473,.01712]
+
+plt.grid()
+plt.plot(area_frac,y2, '-.')
+plt.errorbar(area_frac,avg,yerr=std,fmt='ko', markersize=3, capsize=4)
+plt.xlabel('Memory Written (area fraction)')
+plt.ylabel('Phantom Memory (area fraction)')
+plt.title('Y-Axis Read-Out')
+plt.legend(['Transform=0.90 Theory', 'Kick = 0.05'])
+plt.ylim([0,0.85])
+plt.show()
 
 
 
