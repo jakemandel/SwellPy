@@ -20,7 +20,7 @@ area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 4000 
-xform = .9
+xform = .95
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -43,7 +43,7 @@ mem1 = m.detect_memory_xform(0, 1, .005, 1,1)
 print('Isotropic:',mem1)
 
 scale_x = xform
-scale_y = 1/xform
+scale_y = 1
 for i in m.centers: #Transform centers along readout axis
     i[0] = i[0]*(scale_x/scale_y)
     i[1] = i[1]*(scale_y/scale_x)
@@ -60,7 +60,7 @@ for i in m.centers: #Transform centers back
 mem2 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('x-axis:', mem2)
     
-scale_x = 1/xform
+scale_x = 1
 scale_y = xform
 for i in m.centers: #Transform centers along readout axis
     i[0] = i[0]*(scale_x/scale_y)
