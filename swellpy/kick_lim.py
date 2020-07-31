@@ -19,12 +19,12 @@ seed = 125
 area_frac = 0.5
 kick_list = [0.5, 0.3, 0.1, 0.05,.01]
 cycle_number = 30000
-xform = .7
+xform = .9
 area_frac_array = np.array(np.linspace(0,1,150))
 
 
-scale_x = xform
-scale_y = 1
+scale_x = 1
+scale_y = xform
 for kick in kick_list:
     m = Monodisperse2(N,Bx,By,seed)
     count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
