@@ -20,9 +20,9 @@ m = Monodisperse2(N,Bx,By,seed)
 
 
 area_frac = 0.5
-kick = .5
+kick = .03
 cycle_number = 30000
-xform = .95
+xform = .5
 
 count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
 print('Cycles:', count)
@@ -32,13 +32,13 @@ m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=N
 area_frac_array = np.array(np.linspace(0,1,100))
 
 #plt.axvline(x=0.55,color='r')
-m.tag_plot_xform(xform, 1, area_frac_array, mode='rate', show=True, filename=None)
-plt.ylim([0, 0.55])
-m.tag_plot_xform(1, xform, area_frac_array, mode='rate', show=True, filename=None)
+# m.tag_plot_xform(xform, 1, area_frac_array, mode='rate', show=True, filename=None)
+# plt.ylim([0, 0.55])
+# m.tag_plot_xform(1, xform, area_frac_array, mode='rate', show=True, filename=None)
 
-# m.tag_overlay_plot2(area_frac_array, xform, 1, mode='count', show=True)
-# m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
-# m.tag_overlay_plot2(area_frac_array, xform, 1, mode='curve', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, 1, mode='count', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
+m.tag_overlay_plot2(area_frac_array, xform, 1, mode='curve', show=True)
 
 mem1 = m.detect_memory_xform(0, 1, .005, 1,1)
 print('Isotropic:', mem1)

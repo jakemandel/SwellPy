@@ -19,7 +19,7 @@ seed = 125
 area_frac = 0.5
 kick_list = [0.5, 0.3, 0.1, 0.05,.01]
 cycle_number = 30000
-xform = .9
+xform = .75
 area_frac_array = np.array(np.linspace(0,1,150))
 
 
