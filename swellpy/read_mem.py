@@ -25,7 +25,7 @@ xform = .95
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
 
-count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
+count = m.train_xform(1, xform, area_frac, kick, cycle_number, noise=0)
 print(count)
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -156,7 +156,7 @@ area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 4000 
-xform = .9
+xform = .95
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -214,21 +214,79 @@ for i in m.centers: #Transform centers back
 mem3 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('y-axis:',mem3)
 
+plt.figure(figsize=(10,7), dpi= 80)
 plt.plot(area_frac_array, data_count_x)
 plt.plot(area_frac_array, data_count_y)
-plt.ylabel('Count')
+plt.ylabel('Fraction of Active Particles')
 plt.xlabel('Area Fraction')
 plt.legend(['On-Axis', 'Off-Axis'])
 plt.show()
+
+plt.figure(figsize=(10,7), dpi= 80)
 plt.plot(area_frac_array, data_rate_x)
 plt.plot(area_frac_array, data_rate_y)
-plt.ylabel('Rate')
+plt.ylabel('(Frac of Active Particles)\'')
 plt.xlabel('Area Fraction')
 plt.legend(['On-Axis', 'Off-Axis'])
 plt.show()
+
+plt.figure(figsize=(10,7), dpi= 80)
 plt.plot(area_frac_array, data_curve_x)
 plt.plot(area_frac_array, data_curve_y)
-plt.ylabel('Curve')
+plt.ylabel('(Frac of Active Particles)\'\'')
 plt.xlabel('Area Fraction')
 plt.legend(['On-Axis', 'Off-Axis'])
+plt.show()
+
+#%% For presentation 1
+from monodisperse_box_xform import Monodisperse2
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 1000 
+Bx = 40 #box length (x)
+By = 40 #box length (y)
+seed = 125 
+m = Monodisperse2(N,Bx,By,seed)
+
+area_frac = 0.5
+kick = .05
+swell = m.equiv_swell(area_frac)
+cycle_number = 4000 
+xform = 1
+
+#m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+
+
+count = m.train_xform(1, 1, area_frac, kick, cycle_number, noise=0)
+print(count)
+m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+
+
+area_frac_array = np.array(np.linspace(0,1,150))
+
+func_count_iso = m.tag_count_xform
+func_rate_iso = m.tag_rate_xform
+func_curve_iso = m.tag_curve_xform
+data_count_iso = func_count_iso(area_frac_array, 1, 1)
+data_rate_iso = func_rate_iso(area_frac_array, 1, 1)
+data_curve_iso = func_curve_iso(area_frac_array, 1, 1)
+
+
+plt.figure(figsize=(7,5), dpi= 80)
+plt.plot(area_frac_array, data_count_iso)
+plt.ylabel('Fraction of Active Particles')
+plt.xlabel('Area Fraction')
+plt.show()
+
+plt.figure(figsize=(10,7), dpi= 80)
+plt.plot(area_frac_array, data_rate_iso)
+plt.ylabel('(Frac of Active Particles)\'')
+plt.xlabel('Area Fraction')
+plt.show()
+
+plt.figure(figsize=(10,7), dpi= 80)
+plt.plot(area_frac_array, data_curve_iso)
+plt.ylabel('(Frac of Active Particles)\'\'')
+plt.xlabel('Area Fraction')
 plt.show()
