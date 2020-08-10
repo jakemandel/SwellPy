@@ -72,6 +72,8 @@ for a in area_frac:
 from monodisperse_box_xform import Monodisperse2
 import numpy as np
 import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10,7), dpi= 80)
 area_frac = [.2,.3,.4,.5,.6,.7,.8]
 y1 = [x * .95**4 for x in area_frac]
 y2 = [x * .9**4 for x in area_frac]

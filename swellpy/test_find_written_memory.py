@@ -19,14 +19,15 @@ seed = 125
 m = Monodisperse2(N,Bx,By,seed)
 
 
-area_frac = 0.5
-kick = .03
+area_frac = 0.6
+kick = .05
 cycle_number = 30000
-xform = .5
+xform = .7
 
-count = m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
+m.particle_plot(area_frac, show=True, extend = False, figsize = (7,7), filename=None)
+count = m.train_xform(1, xform, area_frac, kick, cycle_number, noise=0)
 print('Cycles:', count)
-m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
+m.particle_plot(area_frac, show=True, extend = False, figsize = (7,7), filename=None)
 
 
 area_frac_array = np.array(np.linspace(0,1,100))

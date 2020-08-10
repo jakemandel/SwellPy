@@ -35,9 +35,12 @@ scale_y = 1
 
 kwargs = dict(hist_kws={'alpha':.6}, kde_kws={'linewidth':2})
 plt.figure(figsize=(10,7), dpi= 80)
-#sns.set_style('darkgrid')
+sns.set_style('darkgrid')
 
-pairs = m._tag(swell)
+xform_boxsize_x = 40*scale_x
+xform_boxsize_y = 40/scale_y
+m.transform_centers(scale_x,scale_y)
+pairs = m._tag_xform(swell, xform_boxsize_x, xform_boxsize_y)
 print(len(pairs))
 theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
@@ -47,7 +50,7 @@ ax = sns.distplot(x, bins=10, kde=False, norm_hist=True, label="initial", **kwar
 m.train_xform(scale_x, scale_y, area_frac, kick, cycle_number, noise=0)
 
 
-pairs = m._tag(swell)
+pairs = m._tag_xform(swell,xform_boxsize_x, xform_boxsize_y)
 print(len(pairs))
 theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
@@ -56,7 +59,7 @@ ax = sns.distplot(x, bins=10, kde=False, norm_hist=True, label="after 15 cycles"
 
 m.train_xform(scale_x, scale_y, area_frac, kick, cycle_number, noise=0)
 
-pairs = m._tag(swell)
+pairs = m._tag_xform(swell,xform_boxsize_x, xform_boxsize_y)
 print(len(pairs))
 theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
@@ -65,7 +68,7 @@ ax = sns.distplot(x, bins=10, kde=False, norm_hist=True, label="after 30 cycles"
 
 m.train_xform(scale_x, scale_y, area_frac, kick, cycle_number, noise=0)
 
-pairs = m._tag(swell)
+pairs = m._tag_xform(swell,xform_boxsize_x, xform_boxsize_y)
 print(len(pairs))
 theta1 = m.find_angle(pairs)
 theta = [value for value in theta1 if value > 0]
@@ -73,6 +76,8 @@ x = pd.Series(theta, name="Theta (radians)")
 ax = sns.distplot(x, bins=10, kde=False, norm_hist=True, label="after 45 cycles", **kwargs)
 
 
+plt.xticks([0, 3.14/4, 3.14/2, 3*3.14/4, 3.14], ['0', '$\pi$/4', '$\pi$/2','3$\pi$/4', '$\pi$'],rotation=20)
+plt.ylabel('Probability')
 plt.ylim(0,1)
 plt.legend();
 
@@ -424,8 +429,8 @@ area_frac = 0.5 # area fraction
 swell = m.equiv_swell(area_frac)
 kick = .05
 cycle_number = 10 #This is the number of shears that you do to your system.
-scale_x = .9
-scale_y = 1
+scale_x = 1
+scale_y = .4
 
 xform_boxsize_x = (m.boxsize_x*scale_x/scale_y)
 xform_boxsize_y = (m.boxsize_y*scale_y/scale_x)
