@@ -724,8 +724,7 @@ class Monodisperse2(ParticleSystem2):
         
         Parameters
         ----------
-        area_frac : TYPE
-            DESCRIPTION.
+        area_frac : area fraction array for sweep
         scale_x : TYPE
             Scaling factor on x-axis
         scale_y : TYPE
