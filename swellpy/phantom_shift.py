@@ -332,6 +332,8 @@ area_frac_array = np.array(np.linspace(0,1,100))
 #             print(mem2)
 #             print(mem3)
 
+y2 = [x * .9**4 for x in area_frac]
+
 #Each list contains 10 seeds, for kick2
 # af = 0.2
 af2 = [.14,.135,.186,.135,.161,.167,.151,.174,.17]
@@ -361,7 +363,7 @@ std_2 = [0.007571877794400368, 0.011776152927750971, 0.01027456406212285, 0.0160
 std_3 = [0.00949912276651551, 0.010384282995630148, 0.006380525927469551, 0.014045956318061385, 0.03184755354288091, 0.005715476066494061, 0.006272515001532042] #kick3
 
 
-
+plt.figure(figsize=(10,7), dpi= 80)
 plt.grid()
 plt.plot(area_frac,y2, '-.')
 plt.errorbar(area_frac, mean_1, yerr=std_1, fmt='ko', markersize=5, capsize=6)
@@ -371,15 +373,17 @@ plt.title('Y-Axis Read-Out')
 plt.legend(['Transform=0.90 Theory', 'kick = 0.1', 'Kick = 0.05','kick = 0.03'])
 plt.ylim([0,0.85])
 plt.show()
+plt.figure(figsize=(10,7), dpi= 80)
 plt.grid()
 plt.plot(area_frac,y2, '-.')
-plt.errorbar(area_frac, mean_2, yerr=std_2, fmt='ro', markersize=5, capsize=6)
+plt.errorbar(area_frac, mean_2, yerr=std_2, fmt='ko', markersize=5, capsize=6)
 plt.xlabel('Memory Written (area fraction)')
-plt.ylabel('Phantom Memory (area fraction)')
+plt.ylabel('Memory Read-Out (area fraction)')
 plt.title('Y-Axis Read-Out')
 plt.legend(['Transform=0.90 Theory', 'Kick = 0.05'])
 plt.ylim([0,0.85])
 plt.show()
+plt.figure(figsize=(10,7), dpi= 80)
 plt.grid()
 plt.plot(area_frac,y2, '-.')
 plt.errorbar(area_frac, mean_3, yerr=std_3, fmt='go', markersize=5, capsize=6)
@@ -533,10 +537,91 @@ plt.legend(['Transform=0.9 Theory','kick = 0.1','kick = 0.075','kick = 0.05','ki
 #plt.xlim([.3,.7])
 plt.show()
 
-#%%
+
+#%% For Presentation (Errorbar)
 from monodisperse_box_xform import Monodisperse2
 import numpy as np
 import matplotlib.pyplot as plt
+import statistics
 
+N = 1000 
+Bx = 40 #box length (x)
+By = 40 #box length (y)
+seed = [1,2,3,4,5,6,7,8,9,10]
+m = Monodisperse2(N,Bx,By,seed)
+
+
+area_frac = [.2,.3,.4,.5,.6,.7,.8]
+kick1 = .1  #0.1,.05,.03
+kick2 = 0.05
+kick3 = 0.03
+kick_vals = [.1]
+#swell = m.equiv_swell(area_frac)
+cycle_number = 30000
+xform = .90
+area_frac_array = np.array(np.linspace(0,1,100))
+
+
+# for kick in kick_vals:
+#     print('-----------------------')
+#     print('->kick: ', kick)
+#     for af in area_frac:
+#         print('->af=',af)
+#         for val in seed:
+#             print('Seed: ', val)
+#             m = Monodisperse2(N,Bx,By,val)
+#             m.train_xform(xform, 1, af, kick, cycle_number, noise=0)
+#             #m.tag_overlay_plot2(area_frac_array, xform, 1, mode='rate', show=True)
+#             mem1 = m.detect_memory_xform(0, 1, .005, 1, xform)
+#             mem2 = m.detect_memory_xform(0, 1, .003, 1, xform)
+#             mem3 = m.detect_memory_xform(0, 1, .001, 1, xform)
+#             print(mem1)
+#             print(mem2)
+#             print(mem3)
+
+y2 = [x * .9**4 for x in area_frac]
+
+#Each list contains 10 seeds, for kick2
+# af = 0.2
+af2 = [.14,.135,.186,.135,.161,.167,.151,.174,.17]
+# af = 0.3
+af3 = [.252,.24,.221,.321,.228,.263,.216,.206,.251]
+# af = 0.4
+af4 = [.28,.292,.279,.2265,.274,.28,.283,.277,.31]
+# af = 0.5
+af5 = [.341,.359,.339,.405,.36,.343,.372,.3343,.341]
+# af = 0.6
+af6 = [.415,.402,.495,.41,.423,.448,.423,.425,.435]
+# af = 0.7
+af7 = [.469,.48,.475,.471,.462,.469,.469,.476,.495,.496]
+# af = 0.8
+af8 = [.532,.558,.573,.533,.537,.541,.543,.538,.533,.531]
+
+mean = [statistics.mean(af2),statistics.mean(af3),statistics.mean(af4),statistics.mean(af5),statistics.mean(af6),statistics.mean(af7),statistics.mean(af8)]
+print(mean)
+std = [statistics.stdev(af2),statistics.stdev(af3),statistics.stdev(af4),statistics.stdev(af5),statistics.stdev(af6),statistics.stdev(af7),statistics.stdev(af8)]
+print(std)
+
+mean_1 = [0.15766666666666668, 0.24422222222222223, 0.27794444444444444, 0.35492222222222225, 0.43066666666666664, 0.47619999999999996, 0.5419] #kick1
+mean_2 = [0.147, 0.2197, 0.2827, 0.3519, 0.41100000000000003, 0.473, 0.5366000000000001] #kick2
+mean_3 = [0.1427, 0.2165, 0.2706, 0.3448, 0.4186, 0.46900000000000003, 0.5333] #kick3
+std_1 = [0.018384776310850233, 0.03433576043201089, 0.02214503957498784, 0.022501209844016042, 0.027617928959282955, 0.011282237760696631, 0.013510900948657865] #kick1
+std_2 = [0.007571877794400368, 0.011776152927750971, 0.01027456406212285, 0.016023940422588527, 0.013333333333333322, 0.009380831519646846, 0.005358275012642703] #kick2
+std_3 = [0.00949912276651551, 0.010384282995630148, 0.006380525927469551, 0.014045956318061385, 0.03184755354288091, 0.005715476066494061, 0.006272515001532042] #kick3
+
+
+
+
+plt.figure(figsize=(10,7), dpi= 80)
+plt.grid()
+plt.plot(area_frac,area_frac,'--')
+plt.plot(area_frac,y2, '-')
+plt.errorbar(area_frac, mean_2, yerr=std_2, fmt='ko', markersize=5, capsize=6)
+plt.xlabel('Memory Written (area fraction)')
+plt.ylabel('Memory Read-Out (area fraction)')
+#plt.title('Memory Read-Out')
+plt.legend(['On-Axis Read-Out Theory', 'Off-Axis Read-out Theory','Off-Axis Read-Out Actual'])
+plt.ylim([0,0.85])
+plt.show()
 
 
