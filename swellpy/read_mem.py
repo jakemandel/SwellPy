@@ -253,7 +253,7 @@ area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 4000 
-xform = .8
+xform = .95
 
 
 
@@ -307,11 +307,12 @@ mem3 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('y-axis:',mem3)
 
 plt.figure(figsize=(6,4), dpi= 80)
-plt.plot(area_frac_array, data_count_x)
+plt.plot(area_frac_array, data_count_x,'-')
 plt.plot(area_frac_array, data_count_y)
 plt.ylabel('Fraction of Active Particles')
 plt.xlabel('Area Fraction')
-plt.title('Transform = 0.80')
+plt.title('Transform = 0.95')
+plt.legend(['On-Axis','Off-Axis'])
 plt.show()
 
 plt.figure(figsize=(7,5), dpi= 80)
