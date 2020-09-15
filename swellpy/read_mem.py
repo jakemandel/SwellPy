@@ -156,7 +156,7 @@ area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 4000 
-xform = .95
+xform = .88
 
 #m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -214,28 +214,34 @@ for i in m.centers: #Transform centers back
 mem3 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('y-axis:',mem3)
 
-plt.figure(figsize=(10,7), dpi= 80)
+
+xtick = np.arange(0,1,.1)
+
+plt.figure(figsize=(7,5), dpi= 80)
 plt.plot(area_frac_array, data_count_x)
-plt.plot(area_frac_array, data_count_y)
-plt.ylabel('Fraction of Active Particles')
-plt.xlabel('Area Fraction')
+plt.plot(area_frac_array, data_count_y,'r')
+plt.ylabel('Fraction of Active Particles',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
 plt.legend(['On-Axis', 'Off-Axis'])
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
-plt.figure(figsize=(10,7), dpi= 80)
+plt.figure(figsize=(7,5), dpi= 80)
 plt.plot(area_frac_array, data_rate_x)
-plt.plot(area_frac_array, data_rate_y)
-plt.ylabel('(Frac of Active Particles)\'')
-plt.xlabel('Area Fraction')
+plt.plot(area_frac_array, data_rate_y,'r')
+plt.ylabel('First Derivative',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
 plt.legend(['On-Axis', 'Off-Axis'])
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
 plt.figure(figsize=(10,7), dpi= 80)
 plt.plot(area_frac_array, data_curve_x)
 plt.plot(area_frac_array, data_curve_y)
-plt.ylabel('(Frac of Active Particles)\'\'')
-plt.xlabel('Area Fraction')
+plt.ylabel('(Frac of Active Particles)\'\'',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
 plt.legend(['On-Axis', 'Off-Axis'])
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
 #%% For presentation 1
@@ -253,7 +259,7 @@ area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 4000 
-xform = .9
+xform = .88
 
 
 
@@ -306,33 +312,37 @@ for i in m.centers: #Transform centers back
 mem3 = m.detect_memory_xform(0, 1, .005, scale_x,scale_y)
 print('y-axis:',mem3)
 
-
-plt.figure(figsize=(6,4), dpi= 80)
+xtick = np.arange(0,1,.1)
+plt.figure(figsize=(7,5), dpi= 80)
 plt.plot(area_frac_array, data_count_x,'-')
-plt.ylabel('Fraction of Active Particles')
-plt.xlabel('Area Fraction')
-plt.title('On-Axis Read-Out')
+plt.ylabel('Fraction of Active Particles',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
+plt.title('On-Axis Read-Out',fontsize=15)
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
-plt.figure(figsize=(6,4), dpi= 80)
+plt.figure(figsize=(7,5), dpi= 80)
 plt.plot(area_frac_array, data_count_y,'r')
-plt.ylabel('Fraction of Active Particles')
-plt.xlabel('Area Fraction')
-plt.title('Off-Axis Read-out')
+plt.ylabel('Fraction of Active Particles',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
+plt.title('Off-Axis Read-out',fontsize=15)
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
-plt.figure(figsize=(6,4), dpi= 80)
+plt.figure(figsize=(7,5), dpi= 80)
 plt.plot(area_frac_array, data_rate_x)
-plt.ylabel('(Frac of Active Particles)\'')
-plt.xlabel('Area Fraction')
+plt.ylabel('First Derivative',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
 plt.ylim([-.01, 0.45])
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
-plt.figure(figsize=(6,4), dpi= 80)
+plt.figure(figsize=(7,5), dpi= 80)
 plt.plot(area_frac_array, data_rate_y,'r')
-plt.ylabel('(Frac of Active Particles)\'')
-plt.xlabel('Area Fraction')
+plt.ylabel('First Derivative',fontsize=15)
+plt.xlabel('Area Fraction',fontsize=15)
 plt.ylim([-.01, 0.45])
+plt.xticks(xtick,fontsize=15)
 plt.show()
 
 # plt.figure(figsize=(10,7), dpi= 80)

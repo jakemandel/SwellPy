@@ -19,10 +19,12 @@ area_frac = 0.5
 kick = .05
 swell = m.equiv_swell(area_frac)
 cycle_number = 300 
+xform = 0.9
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
-m.train_xform(.7, 1, area_frac, kick, cycle_number, noise=0)
+#xform x-axis
+m.train_xform(xform, 1, area_frac, kick, cycle_number, noise=0)
 
 m.particle_plot(area_frac, show=True, extend = True, figsize = (7,7), filename=None)
 
@@ -37,7 +39,7 @@ memory_iso = m.detect_memory_xform(0, 1, .01, 1, 1)
 print("Isotropic Memory Read-out:", memory_iso)
 
 #Read along x-axis
-scale_x1 = .7
+scale_x1 = xform
 scale_y1 = 1
 area_frac_array = np.array(np.linspace(0,1,100))
 m.tag_plot_xform(scale_x1, scale_y1, area_frac_array, mode='count', show=True, filename=None)
@@ -48,7 +50,7 @@ print("Memory Read-out along x-axis:", memory_x)
 
 #Read along y-axis
 scale_x2 = 1
-scale_y2 = .7
+scale_y2 = xform
 area_frac_array = np.array(np.linspace(0,1,100))
 m.tag_plot_xform(scale_x2, scale_y2, area_frac_array, mode='count', show=True, filename=None)
 m.tag_plot_xform(scale_x2, scale_y2, area_frac_array, mode='rate', show=True, filename=None)
